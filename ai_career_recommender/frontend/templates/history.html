@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}History Log - EduPath AI{% endblock %}
+
+{% block content %}
+<div class="row hero-gradient py-2 g-4">
+    <div class="col-12">
+        <div class="card glass-card border-0 p-4">
+            <div class="card-body">
+                <h2 class="text-white mb-1"><i class="fa-solid fa-clock-rotate-left text-cyan me-2"></i>Recommendation History</h2>
+                <p class="text-muted mb-0">Review previous recommendation sessions and matching benchmark logs.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8 mx-auto">
+        <div class="card glass-card border-0 p-4">
+            <div class="card-body">
+                <h3 class="text-white mb-4"><i class="fa-solid fa-history text-cyan me-2"></i>Log Archive</h3>
+                
+                {% if history %}
+                    <div class="table-responsive">
+                        <table class="table table-dark table-striped border-secondary align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Session Date</th>
+                                    <th>Roles Mapped</th>
+                                    <th>Highest Compatibility</th>
+                                    <th class="text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for log in history %}
+                                <tr>
+                                    <td>
+                                        <i class="fa-regular fa-calendar text-cyan me-2"></i>{{ log.rec_date }}
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-secondary">{{ log.career_count }} Careers</span>
+                                    </td>
+                                    <td class="text-cyan fw-bold">
+                                        {{ (log.max_score * 100)|round|int }}%
+                                    </td>
+                                    <td class="text-end">
+                                        <a href="{{ url_for('recommendations.get_recommendations') }}" class="btn btn-premium btn-sm py-1 px-3">
+                                            View Matches
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <i class="fa-regular fa-folder-open text-muted mb-3" style="font-size: 2.5rem;"></i>
+                        <p class="text-muted">No historical sessions recorded. Run the mapping engine first!</p>
+                        <a href="{{ url_for('recommendations.get_recommendations') }}" class="btn btn-premium btn-sm">
+                            Generate Matches
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

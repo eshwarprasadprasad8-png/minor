@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Register - EduPath AI{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center align-items-center min-vh-75 hero-gradient">
+    <div class="col-md-5">
+        <div class="card glass-card p-4 my-5 border-0">
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <h2 class="text-white"><i class="fa-solid fa-user-plus text-cyan me-2"></i>Create Account</h2>
+                    <p class="text-muted">Start mapping your academic career today</p>
+                </div>
+                
+                <form action="{{ url_for('auth.register') }}" method="POST">
+                    <!-- Username Input -->
+                    <div class="mb-3">
+                        <label for="username" class="form-label form-label-custom">Username</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent border-secondary text-muted"><i class="fa-regular fa-user"></i></span>
+                            <input type="text" class="form-control form-control-custom" id="username" name="username" placeholder="Choose a username" required>
+                        </div>
+                    </div>
+                    
+                    <!-- Email Input -->
+                    <div class="mb-3">
+                        <label for="email" class="form-label form-label-custom">Email Address</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent border-secondary text-muted"><i class="fa-regular fa-envelope"></i></span>
+                            <input type="email" class="form-control form-control-custom" id="email" name="email" placeholder="Enter your email" required>
+                        </div>
+                    </div>
+                    
+                    <!-- Password Input -->
+                    <div class="mb-3">
+                        <label for="password" class="form-label form-label-custom">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent border-secondary text-muted"><i class="fa-solid fa-key"></i></span>
+                            <input type="password" class="form-control form-control-custom" id="password" name="password" placeholder="Create a password" required>
+                        </div>
+                    </div>
+                    
+                    <!-- Role Selection -->
+                    <div class="mb-4">
+                        <label for="role" class="form-label form-label-custom">Account Type</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent border-secondary text-muted"><i class="fa-solid fa-user-tag"></i></span>
+                            <select class="form-select form-control-custom" id="role" name="role">
+                                <option value="student" selected>Student</option>
+                                <option value="admin">Admin / Faculty</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-premium w-100 mb-3">
+                        <i class="fa-solid fa-user-check me-2"></i>Sign Up
+                    </button>
+                </form>
+                
+                <div class="text-center">
+                    <p class="mb-0 text-muted">Already have an account? 
+                        <a href="{{ url_for('auth.login') }}" class="text-cyan text-decoration-none font-weight-bold">Sign In here</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

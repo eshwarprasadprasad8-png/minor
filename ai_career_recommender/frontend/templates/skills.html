@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}Skills - EduPath AI{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center py-2">
+    <div class="col-lg-8">
+        <!-- Profile Setup Wizard Progress -->
+        <div class="card glass-card border-0 mb-4 py-3">
+            <div class="card-body">
+                <div class="row text-center fs-7 fw-bold text-muted">
+                    <div class="col text-white">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-dark text-white rounded-circle mb-2" style="width:28px; height:28px; border: 1px solid var(--border-color);"><i class="fa-solid fa-check"></i></div>
+                        <div>General Info</div>
+                    </div>
+                    <div class="col text-white">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-dark text-white rounded-circle mb-2" style="width:28px; height:28px; border: 1px solid var(--border-color);"><i class="fa-solid fa-check"></i></div>
+                        <div>Education</div>
+                    </div>
+                    <div class="col text-white">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-dark text-white rounded-circle mb-2" style="width:28px; height:28px; border: 1px solid var(--border-color);"><i class="fa-solid fa-check"></i></div>
+                        <div>Interests</div>
+                    </div>
+                    <div class="col text-cyan">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-cyan text-dark rounded-circle mb-2" style="width:28px; height:28px;">4</div>
+                        <div>Skills</div>
+                    </div>
+                    <div class="col">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-dark text-muted rounded-circle mb-2" style="width:28px; height:28px; border: 1px solid var(--border-color);">5</div>
+                        <div>Preferences</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Skills Selection Card -->
+        <div class="card glass-card border-0 p-4">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <div class="bg-warning bg-opacity-25 p-3 rounded-3 text-warning">
+                        <i class="fa-solid fa-screwdriver-wrench fs-2"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-white mb-1">Select Current Skills</h2>
+                        <p class="text-muted mb-0">Select the skills you already possess or have worked with before.</p>
+                    </div>
+                </div>
+                
+                <hr class="border-secondary mb-4">
+                
+                <form action="{{ url_for('student.skills') }}" method="POST">
+                    <div class="mb-4">
+                        {% set current_cat = namespace(val='') %}
+                        <div class="row">
+                            {% for skill in skills %}
+                                {% if current_cat.val != skill.category %}
+                                    {% if current_cat.val != '' %}
+                                        </div> <!-- close previous category row -->
+                                    {% endif %}
+                                    {% set current_cat.val = skill.category %}
+                                    <div class="col-12 mt-4 mb-2">
+                                        <h5 class="text-cyan border-bottom border-secondary pb-1">{{ current_cat.val }}</h5>
+                                    </div>
+                                    <div class="row g-2 px-3">
+                                {% endif %}
+                                
+                                <div class="col-md-6 mb-2">
+                                    <div class="form-check card bg-dark border-secondary p-3 h-100 transition-all select-card" style="border-radius: 8px;">
+                                        <input class="form-check-input ms-0 me-2" type="checkbox" name="skills" value="{{ skill.id }}" id="skill_{{ skill.id }}" {% if skill.id in selected_ids %}checked{% endif %}>
+                                        <label class="form-check-label text-light fw-medium ps-1 d-flex justify-content-between align-items-center w-100" for="skill_{{ skill.id }}" style="cursor: pointer;">
+                                            <span>{{ skill.name }}</span>
+                                            <span class="badge rounded-pill fs-9 {% if skill.difficulty_level == 'Beginner' %}bg-success bg-opacity-25 text-success border border-success{% elif skill.difficulty_level == 'Intermediate' %}bg-warning bg-opacity-25 text-warning border border-warning{% else %}bg-danger bg-opacity-25 text-danger border border-danger{% endif %}" style="font-size: 0.65rem;">
+                                                {{ skill.difficulty_level }}
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            {% if skills|length > 0 %}
+                                </div> <!-- close final row -->
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('student.interests') }}" class="btn btn-secondary-custom">
+                            <i class="fa-solid fa-arrow-left me-2"></i> Back
+                        </a>
+                        <button type="submit" class="btn btn-premium px-5">
+                            Save & Continue <i class="fa-solid fa-arrow-right ms-2"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const checkboxes = document.querySelectorAll(".form-check-input");
+        checkboxes.forEach(cb => {
+            const card = cb.closest(".select-card");
+            if (cb.checked) {
+                card.style.borderColor = "var(--secondary)";
+                card.style.backgroundColor = "rgba(0, 242, 254, 0.05)";
+            }
+            cb.addEventListener("change", function() {
+                if (this.checked) {
+                    card.style.borderColor = "var(--secondary)";
+                    card.style.backgroundColor = "rgba(0, 242, 254, 0.05)";
+                } else {
+                    card.style.borderColor = "var(--border-color)";
+                    card.style.backgroundColor = "transparent";
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

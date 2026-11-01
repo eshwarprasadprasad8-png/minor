@@ -1,0 +1,226 @@
+{% extends "base.html" %}
+
+{% block title %}Alternative Career Pathways - EduPath AI{% endblock %}
+
+{% block content %}
+<div class="row hero-gradient py-2 g-4">
+    <!-- Header & Base Career Switcher Banner -->
+    <div class="col-12">
+        <div class="card glass-card border-0 p-4">
+            <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                <div>
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <span class="badge badge-custom bg-info bg-opacity-10 text-cyan border border-info border-opacity-25">
+                            <i class="fa-solid fa-shuffle me-1"></i> Career Crosswalk
+                        </span>
+                        <span class="badge badge-custom bg-secondary bg-opacity-25 text-light">
+                            Multi-Modal Similarity
+                        </span>
+                    </div>
+                    <h2 class="text-white mb-1">
+                        <i class="fa-solid fa-network-wired text-cyan me-2"></i>Alternative Career Pathways
+                    </h2>
+                    <p class="text-muted mb-0">
+                        Discover adjacent roles closely aligned with 
+                        <strong class="text-white">{{ top_career.title if top_career else 'your primary match' }}</strong>
+                        calculated via Knowledge Graph overlap, ML content vectors, and GNN node embeddings.
+                    </p>
+                </div>
+
+                <!-- Career Switcher Dropdown -->
+                {% if recommended_careers %}
+                <div class="min-w-250">
+                    <label class="form-label text-muted fs-8 mb-1">Compare Against Career:</label>
+                    <select class="form-select bg-dark text-light border-secondary fs-8" id="altCareerSelector" onchange="switchBaseCareer(this.value)">
+                        {% for c in recommended_careers %}
+                        <option value="{{ c.id }}" {% if c.id == selected_career_id %}selected{% endif %}>
+                            {{ c.title }} ({{ (c.score * 100)|round|int }}% match)
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% if alternatives and top_career %}
+    <!-- Base Reference Career Left Card -->
+    <div class="col-lg-4">
+        <div class="card glass-card border-0 p-4 h-100">
+            <div class="card-body d-flex flex-column justify-content-between">
+                <div>
+                    <span class="badge badge-custom badge-career mb-2">Primary Reference Career</span>
+                    <h3 class="text-white mb-2">{{ top_career.title }}</h3>
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <span class="badge bg-info bg-opacity-10 text-cyan border border-info border-opacity-25 fs-8">
+                            {{ top_career.category }}
+                        </span>
+                        <span class="text-muted fs-8">
+                            <i class="fa-solid fa-wallet text-cyan me-1"></i>{{ top_career.average_salary }}
+                        </span>
+                    </div>
+                    <p class="text-light fs-8 mb-4">
+                        {{ top_career.description }}
+                    </p>
+
+                    <div class="p-3 bg-dark bg-opacity-60 rounded border border-secondary border-opacity-30 mb-4">
+                        <div class="text-white fs-8 fw-bold mb-2">
+                            <i class="fa-solid fa-circle-info text-cyan me-1"></i> Similarity Formula:
+                        </div>
+                        <p class="text-muted fs-9 mb-0">
+                            Alternatives are computed from a 3-way multi-modal similarity:
+                            <br>&bull; <strong>40% GNN Embedding Cosine Similarity</strong>
+                            <br>&bull; <strong>35% Knowledge Graph Jaccard Skill Overlap</strong>
+                            <br>&bull; <strong>25% ML Content & Category Alignment</strong>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('recommendations.skill_gap') }}?career_id={{ top_career.id }}" class="btn btn-secondary-custom btn-sm">
+                        <i class="fa-solid fa-circle-nodes me-1"></i> View Skill Gap for Primary
+                    </a>
+                    <a href="{{ url_for('recommendations.get_recommendations') }}" class="btn btn-outline-light btn-sm">
+                        Back to Recommendations
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alternatives Grid Column -->
+    <div class="col-lg-8">
+        <div class="row g-4">
+            {% for alt in alternatives %}
+            <div class="col-12">
+                <div class="card glass-card border-0 p-4 hover-lift">
+                    <div class="card-body">
+                        <!-- Card Top Bar -->
+                        <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+                            <div>
+                                <div class="d-flex align-items-center gap-2 mb-1">
+                                    <span class="badge bg-secondary bg-opacity-25 text-light fs-8">
+                                        {{ alt.category }}
+                                    </span>
+                                    <span class="badge bg-{{ alt.transition_effort_badge }} bg-opacity-20 text-{{ alt.transition_effort_badge }} fs-8">
+                                        <i class="fa-solid fa-gauge me-1"></i>{{ alt.transition_effort }}
+                                    </span>
+                                </div>
+                                <h3 class="text-white mb-1">{{ alt.title }}</h3>
+                            </div>
+                            <div class="text-end">
+                                <div class="fs-2 fw-bold text-cyan">{{ alt.similarity_pct }}%</div>
+                                <div class="text-muted fs-9">Overall Compatibility</div>
+                            </div>
+                        </div>
+
+                        <p class="text-light fs-8 mb-3">{{ alt.description }}</p>
+
+                        <!-- Similarity Dimensions Breakdown Bar -->
+                        <div class="p-2 px-3 bg-dark bg-opacity-50 rounded border border-secondary border-opacity-30 d-flex justify-content-around text-center mb-3">
+                            <div>
+                                <span class="text-muted fs-9 d-block">GNN Embedding Sim</span>
+                                <strong class="text-cyan fs-8">{{ (alt.gnn_similarity * 100)|round|int }}%</strong>
+                            </div>
+                            <div class="border-start border-secondary border-opacity-40 ps-3">
+                                <span class="text-muted fs-9 d-block">Graph Skill Overlap</span>
+                                <strong class="text-success fs-8">{{ (alt.graph_similarity * 100)|round|int }}%</strong>
+                            </div>
+                            <div class="border-start border-secondary border-opacity-40 ps-3">
+                                <span class="text-muted fs-9 d-block">ML Content Match</span>
+                                <strong class="text-purple fs-8">{{ (alt.ml_similarity * 100)|round|int }}%</strong>
+                            </div>
+                        </div>
+
+                        <!-- Skills Comparison: Shared vs Additional Skills -->
+                        <div class="row g-3 mb-3">
+                            <!-- Shared Skills -->
+                            <div class="col-md-6">
+                                <div class="p-3 bg-dark bg-opacity-40 rounded border border-success border-opacity-25 h-100">
+                                    <div class="text-success fs-8 fw-bold mb-2">
+                                        <i class="fa-solid fa-check-double me-1"></i> Shared Skills ({{ alt.shared_skills_count }}):
+                                    </div>
+                                    {% if alt.shared_skills %}
+                                    <div class="d-flex flex-wrap gap-1">
+                                        {% for s in alt.shared_skills %}
+                                        <span class="badge bg-dark text-light border border-success border-opacity-40 fs-9 py-1 px-2">
+                                            {{ s.name }}
+                                        </span>
+                                        {% endfor %}
+                                    </div>
+                                    {% else %}
+                                    <p class="text-muted fs-9 mb-0">No direct skill overlap; connected through domain adjacency.</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <!-- Additional Skills Required -->
+                            <div class="col-md-6">
+                                <div class="p-3 bg-dark bg-opacity-40 rounded border border-warning border-opacity-25 h-100">
+                                    <div class="text-warning fs-8 fw-bold mb-2">
+                                        <i class="fa-solid fa-plus me-1"></i> Additional Skills Required ({{ alt.additional_skills_count }}):
+                                    </div>
+                                    {% if alt.additional_skills %}
+                                    <div class="d-flex flex-wrap gap-1">
+                                        {% for s in alt.additional_skills %}
+                                        <span class="badge bg-dark text-warning border border-warning border-opacity-40 fs-9 py-1 px-2">
+                                            {{ s.name }} {% if s.is_acquired %}<i class="fa-solid fa-check text-success ms-1"></i>{% endif %}
+                                        </span>
+                                        {% endfor %}
+                                    </div>
+                                    {% else %}
+                                    <p class="text-success fs-9 mb-0"><i class="fa-solid fa-check me-1"></i>No additional skills needed!</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card Footer & Actions -->
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 pt-3 border-top border-secondary border-opacity-40">
+                            <div class="d-flex gap-3 text-muted fs-8">
+                                <span><i class="fa-solid fa-wallet text-cyan me-1"></i>Salary: <strong class="text-white">{{ alt.average_salary }}</strong></span>
+                                <span><i class="fa-solid fa-arrow-trend-up text-cyan me-1"></i>Outlook: <strong class="text-white">{{ alt.job_demand }}</strong></span>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <a href="{{ url_for('recommendations.skill_gap') }}?career_id={{ alt.career_id }}" class="btn btn-secondary-custom btn-sm">
+                                    <i class="fa-solid fa-circle-nodes me-1"></i> Skill Gap
+                                </a>
+                                <a href="{{ url_for('recommendations.learning_path') }}?career_id={{ alt.career_id }}" class="btn btn-premium btn-sm">
+                                    <i class="fa-solid fa-route me-1"></i> Learning Roadmap
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <!-- Fallback card when no primary career is selected -->
+    <div class="col-12 text-center py-5">
+        <div class="card glass-card border-0 p-5 my-4">
+            <div class="card-body py-5">
+                <i class="fa-solid fa-shuffle text-cyan mb-4" style="font-size: 3.5rem;"></i>
+                <h3 class="text-white mb-3">No Career Recommendations Found</h3>
+                <p class="text-muted mx-auto mb-4" style="max-width: 500px;">
+                    Please complete your profile and compute recommendations to uncover your personalized alternative career pathways.
+                </p>
+                <a href="{{ url_for('recommendations.get_recommendations') }}" class="btn btn-premium px-4">
+                    Compute Recommendations
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+function switchBaseCareer(careerId) {
+    if (careerId) {
+        window.location.href = "{{ url_for('recommendations.alternative_careers') }}?career_id=" + careerId;
+    }
+}
+</script>
+{% endblock %}
