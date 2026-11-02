@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduPath AI — Next-Gen AI Skill & Career Recommendation Platform</title>
+    
+    <!-- Meta SEO -->
+    <meta name="description" content="A Hybrid Machine Learning, Knowledge Graph, and PyTorch Geometric GraphSAGE Engine for Student Career Navigation and Dynamic Topological Learning Paths.">
+    <meta name="keywords" content="AI Career Recommender, Graph Neural Networks, GraphSAGE, Knowledge Graph, Skill Gap Analysis, Machine Learning">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome 6 Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Design System CSS -->
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+
+    <style>
+        /* Smooth scrolling for anchor links */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="bg-main text-primary">
+
+    <!-- Ambient Mesh Gradients -->
+    <div class="ambient-mesh">
+        <div class="mesh-orb mesh-orb-cyan"></div>
+        <div class="mesh-orb mesh-orb-purple"></div>
+        <div class="mesh-orb mesh-orb-blue"></div>
+        <div class="grid-matrix"></div>
+    </div>
+
+    <!-- =========================================================================
+         1. CLEAN & PREMIUM NAVIGATION BAR
+         ========================================================================= -->
+    <nav class="navbar navbar-expand-lg landing-nav sticky-top py-3" id="mainNavbar">
+        <div class="container px-4">
+            <!-- Brand Logo -->
+            <a class="navbar-brand navbar-brand-custom d-flex align-items-center gap-2" href="{{ url_for('home') }}">
+                <div class="d-flex align-items-center justify-content-center bg-cyan bg-opacity-10 text-cyan rounded-3 p-2 border border-info border-opacity-25" style="width: 42px; height: 42px;">
+                    <i class="fa-solid fa-brain-circuit fs-5"></i>
+                </div>
+                <div>
+                    <span class="fw-bold text-white fs-5 tracking-tight">EduPath<span class="text-cyan">.AI</span></span>
+                    <span class="badge bg-secondary bg-opacity-25 text-cyan border border-info border-opacity-25 fs-9 ms-1">v2.4</span>
+                </div>
+            </a>
+
+            <!-- Mobile Hamburger Toggle -->
+            <button class="navbar-toggler border-secondary text-light" type="button" data-bs-toggle="collapse" data-bs-target="#landingNavCollapse" aria-controls="landingNavCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fa-solid fa-bars fs-5"></i>
+            </button>
+
+            <!-- Navigation Links -->
+            <div class="collapse navbar-collapse" id="landingNavCollapse">
+                <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-1 gap-lg-2">
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-landing" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-landing" href="#ai-engine">AI Architecture</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-landing" href="#how-it-works">How It Works</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-landing" href="#careers">Career Explorer</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-landing" href="#testimonials">Testimonials</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-landing" href="#faq">FAQ</a>
+                    </li>
+                </ul>
+
+                <!-- Right Action Buttons -->
+                <div class="d-flex align-items-center gap-2 mt-3 mt-lg-0">
+                    {% if current_user.is_authenticated %}
+                        <div class="dropdown">
+                            <a class="btn btn-outline-light dropdown-toggle d-flex align-items-center gap-2 py-2 px-3 fs-8 rounded-3" href="#" role="button" id="authDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa-regular fa-user-circle fs-6 text-cyan"></i>
+                                <span>{{ current_user.username }}</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark border-secondary shadow-lg" aria-labelledby="authDropdown">
+                                <li>
+                                    <a class="dropdown-item py-2" href="{{ url_for('student.dashboard') }}">
+                                        <i class="fa-solid fa-gauge text-cyan me-2"></i> Student Dashboard
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item py-2" href="{{ url_for('student.profile') }}">
+                                        <i class="fa-solid fa-user-gear text-primary me-2"></i> My Profile
+                                    </a>
+                                </li>
+                                {% if current_user.role == 'admin' %}
+                                    <li>
+                                        <a class="dropdown-item py-2" href="{{ url_for('admin.dashboard') }}">
+                                            <i class="fa-solid fa-user-shield text-warning me-2"></i> Admin Portal
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                <li><hr class="dropdown-divider border-secondary"></li>
+                                <li>
+                                    <a class="dropdown-item py-2 text-danger" href="{{ url_for('auth.logout') }}">
+                                        <i class="fa-solid fa-arrow-right-from-bracket me-2"></i> Logout
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <a href="{{ url_for('student.dashboard') }}" class="btn btn-premium py-2 px-3 fs-8">
+                            <i class="fa-solid fa-gauge me-1"></i> Dashboard
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-secondary-custom py-2 px-3 fs-8">
+                            <i class="fa-solid fa-right-to-bracket me-1"></i> Sign In
+                        </a>
+                        <a href="{{ url_for('auth.register') }}" class="btn btn-premium py-2 px-3 fs-8">
+                            <i class="fa-solid fa-user-plus me-1"></i> Get Started Free
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- =========================================================================
+         2. STUNNING HERO SECTION
+         ========================================================================= -->
+    <header class="hero-wrapper position-relative">
+        <div class="container px-4">
+            <div class="row align-items-center g-5">
+                <!-- Left Hero Content -->
+                <div class="col-lg-7">
+                    <!-- Announcement Pill -->
+                    <div class="mb-4">
+                        <div class="announcement-pill">
+                            <span class="pulse-dot"></span>
+                            <span>Next-Gen Graph Neural Network Platform</span>
+                            <span class="badge bg-cyan bg-opacity-20 text-cyan rounded-pill px-2 py-1 fs-9 ms-1">GraphSAGE</span>
+                        </div>
+                    </div>
+
+                    <!-- Main Catchy Title -->
+                    <h1 class="hero-title mb-4">
+                        Navigate Your Tech Career with 
+                        <span class="gradient-text">Graph AI Precision</span>
+                    </h1>
+
+                    <!-- Compelling Subtitle -->
+                    <p class="hero-subtitle mb-4">
+                        Stop navigating career choices with static keyword searches. EduPath AI fuses <strong>Content-Based Vector Recommenders (40%)</strong> with <strong>PyTorch Geometric GraphSAGE (60%)</strong> to uncover your ideal engineering roles, isolate prerequisite skill gaps, and compute topological study paths.
+                    </p>
+
+                    <!-- CTA Group -->
+                    <div class="d-flex flex-wrap align-items-center gap-3 mb-5 hero-cta-group">
+                        {% if current_user.is_authenticated %}
+                            <a href="{{ url_for('student.dashboard') }}" class="btn-hero-primary">
+                                <i class="fa-solid fa-compass"></i> Open My Dashboard
+                                <i class="fa-solid fa-arrow-right ms-1"></i>
+                            </a>
+                        {% else %}
+                            <a href="{{ url_for('auth.register') }}" class="btn-hero-primary">
+                                <i class="fa-solid fa-rocket"></i> Start Assessment Free
+                                <i class="fa-solid fa-arrow-right ms-1"></i>
+                            </a>
+                        {% endif %}
+
+                        <a href="{{ url_for('recommendations.view_graph') if current_user.is_authenticated else url_for('auth.login') }}" class="btn-hero-secondary">
+                            <i class="fa-solid fa-circle-nodes text-cyan"></i> Explore Knowledge Graph
+                        </a>
+                    </div>
+
+                    <!-- Trust Signals & Badges -->
+                    <div class="d-flex flex-wrap align-items-center gap-4 text-muted fs-8 hero-trust-row">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="fa-solid fa-check text-cyan"></i>
+                            <span>167 Graph Entities</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="fa-solid fa-check text-cyan"></i>
+                            <span>Inductive 32-dim Latent Space</span>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="fa-solid fa-check text-cyan"></i>
+                            <span>MMR Category Diversity</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Hero Floating SaaS Mockup Card -->
+                <div class="col-lg-5">
+                    <div class="hero-mockup-wrapper">
+                        <!-- Top Floating Satellite Badge -->
+                        <div class="satellite-badge satellite-badge-top">
+                            <div class="bg-success bg-opacity-20 text-success p-2 rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                                <i class="fa-solid fa-shield-check fs-7"></i>
+                            </div>
+                            <div>
+                                <div class="text-white fw-bold fs-9">MMR Diversity Filter</div>
+                                <div class="text-muted fs-9">Anti-Saturation &bull; Active</div>
+                            </div>
+                        </div>
+
+                        <!-- Main Glass Preview Card -->
+                        <div class="hero-mockup-card">
+                            <!-- Card Header Bar -->
+                            <div class="d-flex align-items-center justify-content-between mb-3 pb-3 border-bottom border-secondary border-opacity-25">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="rounded-circle bg-danger" style="width: 10px; height: 10px;"></div>
+                                    <div class="rounded-circle bg-warning" style="width: 10px; height: 10px;"></div>
+                                    <div class="rounded-circle bg-success" style="width: 10px; height: 10px;"></div>
+                                    <span class="text-muted fs-9 ms-2 font-monospace">inference_engine_v2.py</span>
+                                </div>
+                                <span class="badge bg-cyan bg-opacity-10 text-cyan border border-info border-opacity-25 fs-9">
+                                    <i class="fa-solid fa-bolt me-1"></i> Live GNN Scoring
+                                </span>
+                            </div>
+
+                            <!-- Candidate Profile Header -->
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="bg-primary bg-opacity-20 text-primary p-3 rounded-circle d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                                        <i class="fa-solid fa-user-graduate fs-5"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-white fw-bold fs-7">Student Evaluation</div>
+                                        <div class="text-muted fs-9">B.Tech CS &bull; Academic Track '26</div>
+                                    </div>
+                                </div>
+                                <span class="badge bg-success bg-opacity-20 text-success border border-success border-opacity-25 fs-9">
+                                    #1 Primary Match
+                                </span>
+                            </div>
+
+                            <!-- Match Score Highlight Box -->
+                            <div class="p-3 bg-dark bg-opacity-70 border border-secondary border-opacity-25 rounded-3 mb-3">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <span class="badge bg-secondary bg-opacity-25 text-light fs-9 mb-1">AI / ML Domain</span>
+                                        <h5 class="text-white fw-bold mb-1">Lead Machine Learning Engineer</h5>
+                                        <div class="text-muted fs-9">Avg. Salary: $125,000 &bull; High Demand</div>
+                                    </div>
+                                    <!-- Circular Radial Progress Indicator -->
+                                    <div class="match-score-ring">
+                                        <svg width="90" height="90" viewBox="0 0 90 90">
+                                            <defs>
+                                                <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                    <stop offset="0%" stop-color="#00f2fe" />
+                                                    <stop offset="100%" stop-color="#a855f7" />
+                                                </linearGradient>
+                                            </defs>
+                                            <circle class="ring-bg" cx="45" cy="45" r="38"></circle>
+                                            <circle class="ring-fill" cx="45" cy="45" r="38"></circle>
+                                        </svg>
+                                        <div class="ring-text">
+                                            <span>94%</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Dual Model Factors -->
+                                <div class="mt-3 pt-2 border-top border-secondary border-opacity-25">
+                                    <div class="d-flex justify-content-between fs-9 text-muted mb-1">
+                                        <span>ML Requirement Vector Match (40%):</span>
+                                        <span class="text-cyan fw-bold">91.5%</span>
+                                    </div>
+                                    <div class="progress bg-dark mb-2" style="height: 5px;">
+                                        <div class="progress-bar bg-cyan" style="width: 91.5%;"></div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between fs-9 text-muted mb-1">
+                                        <span>PyG GraphSAGE Inductive Embedding (60%):</span>
+                                        <span class="text-purple fw-bold">96.0%</span>
+                                    </div>
+                                    <div class="progress bg-dark" style="height: 5px;">
+                                        <div class="progress-bar bg-purple" style="width: 96%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Live Skill Tags -->
+                            <div>
+                                <div class="text-muted fs-9 mb-2 fw-semibold">SKILLS TAXONOMY BENCHMARK:</div>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <span class="badge-skill-acquired"><i class="fa-solid fa-check me-1"></i>Python</span>
+                                    <span class="badge-skill-acquired"><i class="fa-solid fa-check me-1"></i>PyTorch</span>
+                                    <span class="badge-skill-acquired"><i class="fa-solid fa-check me-1"></i>Pandas</span>
+                                    <span class="badge-skill-gap"><i class="fa-solid fa-arrow-up me-1"></i>MLOps (+2 wks)</span>
+                                    <span class="badge-skill-gap"><i class="fa-solid fa-arrow-up me-1"></i>Docker (+1 wk)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bottom Floating Satellite Badge -->
+                        <div class="satellite-badge satellite-badge-bottom">
+                            <div class="bg-cyan bg-opacity-20 text-cyan p-2 rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                                <i class="fa-solid fa-route fs-7"></i>
+                            </div>
+                            <div>
+                                <div class="text-white fw-bold fs-9">Topological Sort Active</div>
+                                <div class="text-muted fs-9">10-Week Milestone Roadmap</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- =========================================================================
+         3. LIVE METRICS & STATS STRIP
+         ========================================================================= -->
+    <section class="metrics-strip">
+        <div class="container px-4">
+            <div class="row g-4 justify-content-center">
+                <div class="col-6 col-lg-3">
+                    <div class="metric-item">
+                        <div class="metric-number gradient-text">{{ total_skills }}+</div>
+                        <div class="metric-label">Skills Taxonomy in Graph</div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="metric-item">
+                        <div class="metric-number text-white">{{ total_careers }}</div>
+                        <div class="metric-label">Standardized Career Roles</div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="metric-item">
+                        <div class="metric-number gradient-text-purple">948</div>
+                        <div class="metric-label">Relational Edges Mapped</div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="metric-item">
+                        <div class="metric-number gradient-text-gold">32-dim</div>
+                        <div class="metric-label">GraphSAGE Latent Embeddings</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =========================================================================
+         4. CORE FEATURES & CAPABILITIES GRID
+         ========================================================================= -->
+    <section class="py-6 position-relative" id="features" style="padding-top: 6rem; padding-bottom: 6rem;">
+        <div class="container px-4">
+            <div class="text-center mb-5">
+                <div class="section-badge">
+                    <i class="fa-solid fa-wand-magic-sparkles me-1"></i> Core Capabilities
+                </div>
+                <h2 class="section-title">Engineered for Technical Precision</h2>
+                <p class="section-desc">
+                    Unlike flat keyword matching algorithms, EduPath AI treats career trajectories as dynamic, interconnected graphs of prerequisite skills, academic background, and professional domains.
+                </p>
+            </div>
+
+            <div class="row g-4">
+                <!-- Feature 1 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card-premium">
+                        <div>
+                            <div class="feature-icon-box icon-cyan">
+                                <i class="fa-solid fa-bullseye"></i>
+                            </div>
+                            <h4 class="text-white fw-bold mb-2">Content-Based ML Vector Scoring</h4>
+                            <p class="text-muted fs-8 mb-4">
+                                Maps candidate skills against normalized career requirement vectors. Incorporates continuous importance weighting, academic degree bonuses (+10%), and declared interest alignment (+5%).
+                            </p>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between pt-3 border-top border-secondary border-opacity-25">
+                            <span class="tech-tag">Weight Vector Matching</span>
+                            <span class="text-cyan fs-8 fw-semibold">w = 0.40</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card-premium">
+                        <div>
+                            <div class="feature-icon-box icon-purple">
+                                <i class="fa-solid fa-network-wired"></i>
+                            </div>
+                            <h4 class="text-white fw-bold mb-2">PyG GraphSAGE Deep Learning</h4>
+                            <p class="text-muted fs-8 mb-4">
+                                Implements 2-layer Graph Sample and Aggregate (GraphSAGE) neural convolutions to learn 32-dimensional inductive node embeddings and compute multi-hop cosine affinity scores.
+                            </p>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between pt-3 border-top border-secondary border-opacity-25">
+                            <span class="tech-tag">PyG 2.3+ GraphSAGE</span>
+                            <span class="text-purple fs-8 fw-semibold">w = 0.60</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card-premium">
+                        <div>
+                            <div class="feature-icon-box icon-emerald">
+                                <i class="fa-solid fa-circle-nodes"></i>
+                            </div>
+                            <h4 class="text-white fw-bold mb-2">Heterogeneous Knowledge Graph</h4>
+                            <p class="text-muted fs-8 mb-4">
+                                NetworkX ontology unifying 167 entities (40 careers, 102 skills, 15 interests, 10 education profiles) across 948 prerequisite and qualification relational edges.
+                            </p>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between pt-3 border-top border-secondary border-opacity-25">
+                            <span class="tech-tag">NetworkX 3.4 DiGraph</span>
+                            <span class="text-success fs-8 fw-semibold">167 Nodes</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card-premium">
+                        <div>
+                            <div class="feature-icon-box icon-amber">
+                                <i class="fa-solid fa-scale-balanced"></i>
+                            </div>
+                            <h4 class="text-white fw-bold mb-2">MMR Diversity Filtering</h4>
+                            <p class="text-muted fs-8 mb-4">
+                                Maximal Marginal Relevance category balancing prevents recommendation lists from being oversaturated with identical role variations, enforcing cross-domain exploration.
+                            </p>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between pt-3 border-top border-secondary border-opacity-25">
+                            <span class="tech-tag">Penalty &lambda; = 0.15</span>
+                            <span class="text-warning fs-8 fw-semibold">Max 2 per Cat</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card-premium">
+                        <div>
+                            <div class="feature-icon-box icon-pink">
+                                <i class="fa-solid fa-magnifying-glass-chart"></i>
+                            </div>
+                            <h4 class="text-white fw-bold mb-2">Data-Grounded Explainability</h4>
+                            <p class="text-muted fs-8 mb-4">
+                                Complete transparency with no black-box decisions. Generates detailed diagnostics showing matched skills, verified strengths, and prioritized critical prerequisite gaps.
+                            </p>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between pt-3 border-top border-secondary border-opacity-25">
+                            <span class="tech-tag">Diagnostic Reasoning</span>
+                            <span class="text-pink fs-8 fw-semibold">100% Grounded</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="feature-card-premium">
+                        <div>
+                            <div class="feature-icon-box icon-blue">
+                                <i class="fa-solid fa-route"></i>
+                            </div>
+                            <h4 class="text-white fw-bold mb-2">Topological Learning Roadmaps</h4>
+                            <p class="text-muted fs-8 mb-4">
+                                Dynamic topological sort traversal over prerequisite skill dependencies, grouping missing competencies into structured Foundation, Specialization, and Mastery phases.
+                            </p>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between pt-3 border-top border-secondary border-opacity-25">
+                            <span class="tech-tag">DAG Topological Sort</span>
+                            <span class="text-info fs-8 fw-semibold">Phased Timeline</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =========================================================================
+         5. THE SCIENCE BEHIND IT (AI ARCHITECTURE SHOWCASE)
+         ========================================================================= -->
+    <section class="py-6 position-relative bg-dark bg-opacity-40" id="ai-engine" style="padding-top: 6rem; padding-bottom: 6rem; border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06);">
+        <div class="container px-4">
+            <div class="text-center mb-5">
+                <div class="section-badge section-badge-purple">
+                    <i class="fa-solid fa-atom me-1"></i> Architecture &amp; Methodology
+                </div>
+                <h2 class="section-title">The Mathematical Foundation</h2>
+                <p class="section-desc">
+                    Grounded in graph representation learning, linear requirement vector projections, and categorical entropy penalization.
+                </p>
+            </div>
+
+            <div class="row g-4 align-items-stretch">
+                <!-- Left Math Card: Hybrid Recommender Formulation -->
+                <div class="col-lg-6">
+                    <div class="math-glass-card h-100 d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <h4 class="text-white fw-bold mb-0">1. Hybrid Linear Score Blending</h4>
+                                <span class="badge bg-cyan bg-opacity-10 text-cyan border border-info border-opacity-25">Ranking Model</span>
+                            </div>
+                            <p class="text-muted fs-8 mb-4">
+                                Final compatibility combines explicit skill requirement weights ($S_{\text{ML}}$) with topological graph affinity ($S_{\text{GNN}}$), with category saturation penalties ($\lambda = 0.15$):
+                            </p>
+
+                            <!-- Formula Box -->
+                            <div class="formula-display mb-4">
+                                <div class="text-cyan mb-2"># Hybrid Compatibility Formula:</div>
+                                <div>Score_hybrid(u, c) = (0.40 &times; Score_ML) + (0.60 &times; Score_GNN)</div>
+                                <div class="text-muted mt-2"># Maximal Marginal Relevance Penalty:</div>
+                                <div class="text-warning">Score_final(c) = Score_hybrid(c) - (count(cat_c) &times; 0.15)</div>
+                            </div>
+
+                            <ul class="list-unstyled text-muted fs-8 d-flex flex-column gap-2 mb-0">
+                                <li><i class="fa-solid fa-check text-cyan me-2"></i><strong>ML Skill Vector:</strong> $\text{SkillScore}(u, c) = \frac{\sum w_{c,s}}{\sum w_{total}} + \text{Bonus}_{\text{edu}} + \text{Bonus}_{\text{int}}$</li>
+                                <li><i class="fa-solid fa-check text-cyan me-2"></i><strong>Alternative Crosswalk:</strong> $S_{\text{sim}} = 0.40 S_{\text{gnn}} + 0.35 S_{\text{graph}} + 0.25 S_{\text{ml}}$</li>
+                            </ul>
+                        </div>
+
+                        <div class="pt-4 mt-4 border-top border-secondary border-opacity-25 d-flex align-items-center justify-content-between">
+                            <span class="text-muted fs-9">Link Prediction ROC-AUC: <strong>&ge; 0.88</strong></span>
+                            <span class="text-muted fs-9">Hit Rate@5: <strong>&gt; 90%</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Math Card: GraphSAGE Convolutional Aggregation -->
+                <div class="col-lg-6">
+                    <div class="math-glass-card h-100 d-flex flex-column justify-content-between">
+                        <div>
+                            <div class="d-flex align-items-center justify-content-between mb-3">
+                                <h4 class="text-white fw-bold mb-0">2. PyG GraphSAGE Convolutions</h4>
+                                <span class="badge bg-purple bg-opacity-10 text-purple border border-purple border-opacity-25">Deep Learning</span>
+                            </div>
+                            <p class="text-muted fs-8 mb-4">
+                                Inductive node representation learning through localized mean neighborhood aggregation across heterogeneous graph topologies:
+                            </p>
+
+                            <!-- Formula Box -->
+                            <div class="formula-display mb-4">
+                                <div class="text-purple mb-2"># Layer-k Inductive Node Aggregation:</div>
+                                <div>h_N(v)^(k) = MEAN({h_u^(k-1), &forall;u &in; N(v)})</div>
+                                <div class="mt-1">h_v^(k) = &sigma;(W^(k) &bull; [h_v^(k-1) || h_N(v)^(k)])</div>
+                                <div class="text-cyan mt-2"># Composite Student Vector &amp; Cosine Affinity:</div>
+                                <div class="text-white">Score_GNN(u, c) = (z_student &bull; z_career) / (||z_student|| &bull; ||z_career||)</div>
+                            </div>
+
+                            <ul class="list-unstyled text-muted fs-8 d-flex flex-column gap-2 mb-0">
+                                <li><i class="fa-solid fa-check text-purple me-2"></i><strong>Inductive Architecture:</strong> 2-Layer SAGEConv (64 &rarr; 48 &rarr; 32 dimensions)</li>
+                                <li><i class="fa-solid fa-check text-purple me-2"></i><strong>Training Objective:</strong> Binary Cross-Entropy with Logits (BCE)</li>
+                            </ul>
+                        </div>
+
+                        <div class="pt-4 mt-4 border-top border-secondary border-opacity-25 d-flex align-items-center justify-content-between">
+                            <span class="text-muted fs-9">Latent Embedding Size: <strong>32 Dimensions</strong></span>
+                            <span class="text-muted fs-9">Framework: <strong>PyTorch Geometric</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =========================================================================
+         6. HOW IT WORKS (3-STEP INTERACTIVE WORKFLOW)
+         ========================================================================= -->
+    <section class="py-6 position-relative" id="how-it-works" style="padding-top: 6rem; padding-bottom: 6rem;">
+        <div class="container px-4">
+            <div class="text-center mb-5">
+                <div class="section-badge section-badge-emerald">
+                    <i class="fa-solid fa-stairs me-1"></i> Student Journey
+                </div>
+                <h2 class="section-title">How EduPath AI Works</h2>
+                <p class="section-desc">
+                    From raw skills input to an actionable career roadmap in three simple, mathematically grounded steps.
+                </p>
+            </div>
+
+            <div class="row g-4">
+                <!-- Step 1 -->
+                <div class="col-md-4">
+                    <div class="step-card">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <div class="feature-icon-box icon-cyan mb-0" style="width: 48px; height: 48px; font-size: 1.25rem;">
+                                <i class="fa-solid fa-id-card"></i>
+                            </div>
+                            <span class="step-number">01</span>
+                        </div>
+                        <h4 class="text-white fw-bold mb-2">Build Your Skill Profile</h4>
+                        <p class="text-muted fs-8 mb-0">
+                            Select verified programming languages, tools, frameworks, and domain interests through our streamlined 5-step onboarding wizard. Enter your degree and academic branch to unlock qualification bonus factors.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="col-md-4">
+                    <div class="step-card">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <div class="feature-icon-box icon-purple mb-0" style="width: 48px; height: 48px; font-size: 1.25rem;">
+                                <i class="fa-solid fa-microchip"></i>
+                            </div>
+                            <span class="step-number">02</span>
+                        </div>
+                        <h4 class="text-white fw-bold mb-2">Dual-Model Inference</h4>
+                        <p class="text-muted fs-8 mb-0">
+                            The hybrid engine processes your profile simultaneously across the Knowledge Graph. Content vectors calculate direct requirement fulfillment while GraphSAGE predicts latent inductive edge affinity.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="col-md-4">
+                    <div class="step-card">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <div class="feature-icon-box icon-emerald mb-0" style="width: 48px; height: 48px; font-size: 1.25rem;">
+                                <i class="fa-solid fa-route"></i>
+                            </div>
+                            <span class="step-number">03</span>
+                        </div>
+                        <h4 class="text-white fw-bold mb-2">Actionable Career Roadmap</h4>
+                        <p class="text-muted fs-8 mb-0">
+                            Receive your Top-5 ranked career pathways with complete explainability, compare adjacent roles via multi-modal similarity, and follow a topologically sorted milestone curriculum to bridge skill gaps.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =========================================================================
+         7. INTERACTIVE CAREER DOMAIN SHOWCASE
+         ========================================================================= -->
+    <section class="py-6 position-relative bg-dark bg-opacity-40" id="careers" style="padding-top: 6rem; padding-bottom: 6rem; border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06);">
+        <div class="container px-4">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-5">
+                <div>
+                    <div class="section-badge">
+                        <i class="fa-solid fa-briefcase me-1"></i> Industry Taxonomy
+                    </div>
+                    <h2 class="section-title mb-1">Standardized Career Roles</h2>
+                    <p class="section-desc ms-0 mb-0">
+                        Explore {{ total_careers }} distinct technical pathways modeled with detailed skill weights and market demand metrics.
+                    </p>
+                </div>
+                <div>
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-premium px-4 py-2 fs-8">
+                        View All {{ total_careers }} Pathways <i class="fa-solid fa-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Dynamic Career Cards Grid -->
+            <div class="row g-4">
+                {% if featured_careers %}
+                    {% for c in featured_careers %}
+                    <div class="col-md-6 col-lg-4">
+                        <div class="career-showcase-card">
+                            <div>
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <span class="badge bg-secondary bg-opacity-25 text-light fs-9">{{ c.category }}</span>
+                                    <span class="text-success fs-9 fw-bold">
+                                        <i class="fa-solid fa-arrow-trend-up me-1"></i>{{ c.job_outlook }}
+                                    </span>
+                                </div>
+                                <h4 class="text-white fw-bold mb-2">{{ c.title }}</h4>
+                                <p class="text-muted fs-8 mb-3 text-truncate-2" style="min-height: 40px;">
+                                    {{ c.description }}
+                                </p>
+                            </div>
+                            <div>
+                                <div class="d-flex align-items-center justify-content-between pt-3 border-top border-secondary border-opacity-25">
+                                    <div class="text-white fw-bold fs-8">
+                                        <i class="fa-solid fa-dollar-sign text-cyan me-1"></i>{{ c.average_salary }}
+                                    </div>
+                                    <a href="{{ url_for('auth.login') }}" class="btn btn-secondary-custom btn-sm py-1 px-3 fs-9">
+                                        Analyze Gap <i class="fa-solid fa-angle-right ms-1"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <!-- Fallback Sample Roles -->
+                    <div class="col-md-4">
+                        <div class="career-showcase-card">
+                            <div>
+                                <span class="badge bg-secondary bg-opacity-25 text-light fs-9 mb-2">AI & Machine Learning</span>
+                                <h4 class="text-white fw-bold mb-2">Machine Learning Engineer</h4>
+                                <p class="text-muted fs-8 mb-3">Architects, trains, and productionizes deep learning models, transformers, and neural networks.</p>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between pt-3 border-top border-secondary border-opacity-25">
+                                <span class="text-cyan fw-bold fs-8">$130,000</span>
+                                <span class="badge bg-success bg-opacity-20 text-success fs-9">High Growth</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="career-showcase-card">
+                            <div>
+                                <span class="badge bg-secondary bg-opacity-25 text-light fs-9 mb-2">Cloud & DevOps</span>
+                                <h4 class="text-white fw-bold mb-2">Cloud Solutions Architect</h4>
+                                <p class="text-muted fs-8 mb-3">Designs scalable cloud infrastructures, Kubernetes clusters, and automated CI/CD pipelines.</p>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between pt-3 border-top border-secondary border-opacity-25">
+                                <span class="text-cyan fw-bold fs-8">$140,000</span>
+                                <span class="badge bg-success bg-opacity-20 text-success fs-9">High Demand</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="career-showcase-card">
+                            <div>
+                                <span class="badge bg-secondary bg-opacity-25 text-light fs-9 mb-2">Data Science</span>
+                                <h4 class="text-white fw-bold mb-2">Data Scientist</h4>
+                                <p class="text-muted fs-8 mb-3">Derives business intelligence through statistical modeling, feature engineering, and predictive analytics.</p>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-between pt-3 border-top border-secondary border-opacity-25">
+                                <span class="text-cyan fw-bold fs-8">$120,000</span>
+                                <span class="badge bg-success bg-opacity-20 text-success fs-9">High Demand</span>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <!-- =========================================================================
+         8. STUDENT COHORT & RESEARCH TESTIMONIALS
+         ========================================================================= -->
+    <section class="py-6 position-relative" id="testimonials" style="padding-top: 6rem; padding-bottom: 6rem;">
+        <div class="container px-4">
+            <div class="text-center mb-5">
+                <div class="section-badge">
+                    <i class="fa-solid fa-comments me-1"></i> Student Experiences
+                </div>
+                <h2 class="section-title">Validated by Engineering Students</h2>
+                <p class="section-desc">
+                    Hear how students and aspiring engineers leveraged EduPath AI to cut through ambiguity and discover clear technical milestones.
+                </p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="testimonial-card">
+                        <div>
+                            <div class="quote-stars mb-3">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="text-light fs-8 mb-4">
+                                "The topological sort feature was a game-changer. I wanted to learn Machine Learning but didn't know the exact order. EduPath AI mapped my exact gaps and gave me a 10-week roadmap that actually respected prerequisites."
+                            </p>
+                        </div>
+                        <div class="d-flex align-items-center gap-3 pt-3 border-top border-secondary border-opacity-25">
+                            <div class="bg-cyan bg-opacity-10 text-cyan rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                <i class="fa-solid fa-user-check"></i>
+                            </div>
+                            <div>
+                                <div class="text-white fw-bold fs-8">Aarav Sharma</div>
+                                <div class="text-muted fs-9">B.Tech CS Student &bull; Placed as AI Engineer</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="testimonial-card">
+                        <div>
+                            <div class="quote-stars mb-3">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="text-light fs-8 mb-4">
+                                "Most career platforms gave me 5 web development roles that were virtually identical. The MMR diversity filter in EduPath AI opened my eyes to adjacent Cloud & DevOps roles where 75% of my skills already applied!"
+                            </p>
+                        </div>
+                        <div class="d-flex align-items-center gap-3 pt-3 border-top border-secondary border-opacity-25">
+                            <div class="bg-purple bg-opacity-10 text-purple rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                <i class="fa-solid fa-user-check"></i>
+                            </div>
+                            <div>
+                                <div class="text-white fw-bold fs-8">Priya Nair</div>
+                                <div class="text-muted fs-9">Information Technology &bull; Cloud Architect Track</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="testimonial-card">
+                        <div>
+                            <div class="quote-stars mb-3">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                            <p class="text-light fs-8 mb-4">
+                                "The level of explainability is incredible. It doesn't just output a number; it itemizes exactly which skills match, which ones are missing, and why the Graph Neural Network found structural affinity with my profile."
+                            </p>
+                        </div>
+                        <div class="d-flex align-items-center gap-3 pt-3 border-top border-secondary border-opacity-25">
+                            <div class="bg-success bg-opacity-10 text-success rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                <i class="fa-solid fa-user-check"></i>
+                            </div>
+                            <div>
+                                <div class="text-white fw-bold fs-8">Rohan Varma</div>
+                                <div class="text-muted fs-9">Data Science Major &bull; Junior Researcher</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =========================================================================
+         9. FREQUENTLY ASKED QUESTIONS (ACCORDION)
+         ========================================================================= -->
+    <section class="py-6 position-relative bg-dark bg-opacity-40" id="faq" style="padding-top: 6rem; padding-bottom: 6rem; border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06);">
+        <div class="container px-4">
+            <div class="text-center mb-5">
+                <div class="section-badge">
+                    <i class="fa-solid fa-circle-question me-1"></i> Questions &amp; Answers
+                </div>
+                <h2 class="section-title">Frequently Asked Questions</h2>
+                <p class="section-desc">
+                    Learn more about our recommendation algorithms, knowledge graph representations, and privacy standards.
+                </p>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="accordion accordion-custom" id="faqAccordion">
+                        <!-- FAQ 1 -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    How does the Hybrid ML + GraphSAGE Engine compute compatibility?
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Our engine computes two orthogonal metrics: (1) An explicit Content-Based ML Vector score (40% weight) assessing direct skill requirement weights, education degrees, and domain interests; and (2) A PyG GraphSAGE Inductive Embedding cosine similarity (60% weight) that aggregates multi-hop graph topology. The blended score is then regularized using Maximal Marginal Relevance (MMR) to promote domain diversity.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FAQ 2 -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingTwo">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    What if I am a beginner with very few technical skills?
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    The platform is designed specifically for students! Even with zero prior skills, you can select your academic degree, branch, and preferred domain interests (e.g. AI, Web, Cloud). The GNN utilizes inductive inference to predict prospective entry-level pathways and generates a Phase-1 foundational study roadmap.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FAQ 3 -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingThree">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-controls="collapseThree">
+                                    How are learning paths topologically ordered?
+                                </button>
+                            </h2>
+                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    The Knowledge Graph contains directed prerequisite edges ($s_a \to s_b$) between foundational and advanced skills (e.g., Python &rarr; Machine Learning &rarr; Deep Learning &rarr; PyTorch). When generating a learning roadmap, NetworkX performs a Directed Acyclic Graph (DAG) topological sort so you never encounter an advanced concept before its dependencies.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FAQ 4 -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingFour">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                    What are Alternative Career Pathways?
+                                </button>
+                            </h2>
+                            <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Alternative Pathways calculate multi-modal similarity ($S_{sim} = 0.40 S_{gnn} + 0.35 S_{graph} + 0.25 S_{ml}$) to identify adjacent industry roles. It automatically partitions competencies into shared skills vs. additional skills and estimates transition effort as Low, Medium, or High.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FAQ 5 -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingFive">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                    Is EduPath AI free to use for university students?
+                                </button>
+                            </h2>
+                            <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Yes! EduPath AI is developed as an academic minor project in Bachelor of Engineering (Computer Science) and is 100% free and open-access for students, researchers, and educators.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =========================================================================
+         10. HIGH-IMPACT BOTTOM CTA BANNER
+         ========================================================================= -->
+    <section class="py-6 position-relative" style="padding-top: 5rem; padding-bottom: 5rem;">
+        <div class="container px-4">
+            <div class="cta-banner-box text-center">
+                <div class="section-badge mb-3">
+                    <i class="fa-solid fa-sparkles me-1"></i> Start Your Journey
+                </div>
+                <h2 class="text-white fw-bold display-6 mb-3">Ready to Accelerate Your Tech Career?</h2>
+                <p class="text-muted fs-7 mx-auto mb-4" style="max-width: 600px;">
+                    Join students and engineering cohorts using Graph Artificial Intelligence to map competencies, bridge knowledge gaps, and land their dream industry roles.
+                </p>
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('student.dashboard') }}" class="btn-hero-primary px-5 py-3 fs-7">
+                            <i class="fa-solid fa-gauge me-1"></i> Open Student Dashboard
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('auth.register') }}" class="btn-hero-primary px-5 py-3 fs-7">
+                            <i class="fa-solid fa-rocket me-1"></i> Create Free Account
+                        </a>
+                        <a href="{{ url_for('auth.login') }}" class="btn-hero-secondary px-4 py-3 fs-7">
+                            <i class="fa-solid fa-right-to-bracket me-1"></i> Sign In to Account
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =========================================================================
+         11. PROFESSIONAL MULTI-COLUMN FOOTER
+         ========================================================================= -->
+    <footer class="landing-footer">
+        <div class="container px-4">
+            <div class="row g-5 mb-5">
+                <!-- Col 1: Brand & Mission -->
+                <div class="col-lg-4">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <div class="d-flex align-items-center justify-content-center bg-cyan bg-opacity-10 text-cyan rounded-3 p-2 border border-info border-opacity-25" style="width: 38px; height: 38px;">
+                            <i class="fa-solid fa-brain-circuit fs-6"></i>
+                        </div>
+                        <span class="fw-bold text-white fs-5 tracking-tight">EduPath<span class="text-cyan">.AI</span></span>
+                    </div>
+                    <p class="text-muted fs-8 mb-4 pe-lg-4" style="line-height: 1.7;">
+                        A hybrid AI platform combining Machine Learning vector scoring, Heterogeneous Knowledge Graphs, and PyTorch Geometric GraphSAGE for predictive engineering career discovery and topological learning roadmaps.
+                    </p>
+                    <div class="d-flex align-items-center gap-2">
+                        <a href="https://github.com" target="_blank" class="social-icon-btn" title="GitHub Repository">
+                            <i class="fa-brands fa-github"></i>
+                        </a>
+                        <a href="https://linkedin.com" target="_blank" class="social-icon-btn" title="LinkedIn Network">
+                            <i class="fa-brands fa-linkedin-in"></i>
+                        </a>
+                        <a href="#features" class="social-icon-btn" title="Technical Specs">
+                            <i class="fa-solid fa-code"></i>
+                        </a>
+                        <a href="#ai-engine" class="social-icon-btn" title="Research Paper">
+                            <i class="fa-solid fa-file-pdf"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Col 2: Platform Navigation -->
+                <div class="col-6 col-lg-2">
+                    <div class="footer-heading">Student Portal</div>
+                    <ul class="list-unstyled d-flex flex-column gap-2 mb-0">
+                        <li><a href="{{ url_for('student.dashboard') if current_user.is_authenticated else url_for('auth.login') }}" class="footer-link">Dashboard</a></li>
+                        <li><a href="{{ url_for('student.skills') if current_user.is_authenticated else url_for('auth.login') }}" class="footer-link">Skills Catalog</a></li>
+                        <li><a href="{{ url_for('recommendations.get_recommendations') if current_user.is_authenticated else url_for('auth.login') }}" class="footer-link">Recommendations</a></li>
+                        <li><a href="{{ url_for('recommendations.skill_gap') if current_user.is_authenticated else url_for('auth.login') }}" class="footer-link">Skill Gap Analysis</a></li>
+                        <li><a href="{{ url_for('recommendations.learning_path') if current_user.is_authenticated else url_for('auth.login') }}" class="footer-link">Learning Paths</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Research & AI Architecture -->
+                <div class="col-6 col-lg-3">
+                    <div class="footer-heading">Architecture &amp; Tech</div>
+                    <ul class="list-unstyled d-flex flex-column gap-2 mb-0">
+                        <li><a href="#ai-engine" class="footer-link">PyG GraphSAGE (32-dim)</a></li>
+                        <li><a href="#features" class="footer-link">Content-Based ML Recommender</a></li>
+                        <li><a href="#features" class="footer-link">Heterogeneous Knowledge Graph</a></li>
+                        <li><a href="#features" class="footer-link">MMR Diversity Filter (&lambda; = 0.15)</a></li>
+                        <li><a href="{{ url_for('recommendations.view_graph') if current_user.is_authenticated else url_for('auth.login') }}" class="footer-link">Interactive Graph Explorer</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Quick Portals & Authentication -->
+                <div class="col-lg-3">
+                    <div class="footer-heading">Access &amp; Governance</div>
+                    <ul class="list-unstyled d-flex flex-column gap-2 mb-3">
+                        {% if current_user.is_authenticated %}
+                            <li><a href="{{ url_for('student.dashboard') }}" class="footer-link">My Dashboard</a></li>
+                            <li><a href="{{ url_for('student.profile') }}" class="footer-link">Profile Settings</a></li>
+                            {% if current_user.role == 'admin' %}
+                                <li><a href="{{ url_for('admin.dashboard') }}" class="footer-link text-warning"><i class="fa-solid fa-shield me-1"></i> Admin Portal</a></li>
+                            {% endif %}
+                            <li><a href="{{ url_for('auth.logout') }}" class="footer-link text-danger">Sign Out</a></li>
+                        {% else %}
+                            <li><a href="{{ url_for('auth.login') }}" class="footer-link">Student Login</a></li>
+                            <li><a href="{{ url_for('auth.register') }}" class="footer-link">Register Account</a></li>
+                            <li><a href="{{ url_for('auth.forgot_password') }}" class="footer-link">Reset Password</a></li>
+                            <li><a href="{{ url_for('auth.login') }}" class="footer-link text-warning">Admin Sign In</a></li>
+                        {% endif %}
+                    </ul>
+                    <!-- Academic Disclaimer Pill -->
+                    <div class="p-2 bg-dark bg-opacity-70 border border-secondary border-opacity-25 rounded-2 text-muted fs-9">
+                        <i class="fa-solid fa-graduation-cap text-cyan me-1"></i> B.E. Minor Project in CSE
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Copyright & Live Status Bar -->
+            <div class="pt-4 border-top border-secondary border-opacity-25 d-flex flex-column flex-md-row align-items-center justify-content-between gap-3 text-muted fs-9">
+                <div>
+                    &copy; 2026 EduPath AI &bull; AI-Based Skill &amp; Career Recommendation System. All rights reserved.
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    <span class="d-flex align-items-center gap-2">
+                        <span class="pulse-dot" style="width: 7px; height: 7px;"></span>
+                        <span class="text-light">PyTorch Geometric &amp; Knowledge Graph Operational</span>
+                    </span>
+                    <span>&bull;</span>
+                    <a href="#" class="text-muted text-decoration-none hover-cyan">Privacy Policy</a>
+                    <span>&bull;</span>
+                    <a href="#" class="text-muted text-decoration-none hover-cyan">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Landing Page Interactive Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navbar scroll background darkening
+            const navbar = document.getElementById('mainNavbar');
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 40) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+

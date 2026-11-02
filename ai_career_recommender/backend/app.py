@@ -1,5 +1,5 @@
 import os
-from flask import Flask, redirect, url_for
+from flask import Flask, redirect, url_for, render_template
 from flask_login import LoginManager, current_user
 from config import Config
 
@@ -41,9 +41,27 @@ def create_app():
     # Root Home Route
     @app.route('/')
     def home():
-        if current_user.is_authenticated:
-            return redirect(url_for('student.dashboard'))
-        return redirect(url_for('auth.login'))
+        from database.connection import execute_query
+        try:
+            featured_careers = execute_query(
+                "SELECT id, title, category, average_salary, job_outlook, description FROM careers LIMIT 6",
+                fetch='all'
+            ) or []
+            skills_cnt = execute_query("SELECT COUNT(*) as cnt FROM skills", fetch='one')
+            total_skills = skills_cnt['cnt'] if skills_cnt else 102
+            careers_cnt = execute_query("SELECT COUNT(*) as cnt FROM careers", fetch='one')
+            total_careers = careers_cnt['cnt'] if careers_cnt else 40
+        except Exception:
+            featured_careers = []
+            total_skills = 102
+            total_careers = 40
+
+        return render_template(
+            'index.html',
+            featured_careers=featured_careers,
+            total_skills=total_skills,
+            total_careers=total_careers
+        )
 
     return app
 

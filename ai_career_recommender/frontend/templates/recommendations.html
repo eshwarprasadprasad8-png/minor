@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}Career Recommendations - EduPath AI{% endblock %}
+
+{% block content %}
+<div class="row hero-gradient py-2 g-4">
+    <!-- Header Banner -->
+    <div class="col-12">
+        <div class="card glass-card border-0 p-4">
+            <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                <div>
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <span class="badge badge-custom bg-info bg-opacity-10 text-cyan border border-info border-opacity-25">
+                            <i class="fa-solid fa-brain-circuit me-1"></i> Hybrid AI Engine
+                        </span>
+                        <span class="badge badge-custom bg-secondary bg-opacity-25 text-light">
+                            ML (40%) + PyG GraphSAGE (60%)
+                        </span>
+                    </div>
+                    <h2 class="text-white mb-1"><i class="fa-solid fa-compass text-cyan me-2"></i>Personalized Career Recommendations</h2>
+                    <p class="text-muted mb-0">Multi-modal ranking combines requirement vector matching and inductive GNN link prediction with MMR category diversity.</p>
+                </div>
+
+                <a href="{{ url_for('recommendations.get_recommendations') }}?refresh=true" class="btn btn-premium d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-arrows-rotate"></i> Re-Calculate Matches
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recommendations List -->
+    <div class="col-12">
+        <div class="d-flex flex-column gap-4">
+            {% for rec in recommendations %}
+            <div class="card glass-card border-0 p-4 hover-lift">
+                <div class="card-body">
+                    <div class="row g-4 align-items-center">
+                        <!-- Left Details -->
+                        <div class="col-lg-8">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <span class="badge bg-cyan text-dark fw-bold fs-8">
+                                    #{{ rec.rank_position }} Rank
+                                </span>
+                                <span class="badge bg-secondary bg-opacity-25 text-light fs-8">
+                                    {{ rec.category }}
+                                </span>
+                                <span class="text-muted fs-8">
+                                    <i class="fa-solid fa-money-bill-wave text-success me-1"></i> {{ rec.average_salary }}
+                                </span>
+                                <span class="text-muted fs-8">
+                                    <i class="fa-solid fa-arrow-trend-up text-cyan me-1"></i> {{ rec.job_outlook }}
+                                </span>
+                            </div>
+
+                            <h3 class="text-white mb-2">{{ rec.title }}</h3>
+                            <p class="text-muted fs-7 mb-3">{{ rec.description }}</p>
+
+                            <!-- AI Reasoning Quote -->
+                            <div class="p-3 bg-dark bg-opacity-50 border border-secondary border-opacity-25 rounded-3 mb-3">
+                                <div class="text-cyan fs-8 fw-semibold mb-1"><i class="fa-solid fa-microchip me-1"></i>AI Justification:</div>
+                                <div class="text-light fs-8">{{ rec.explanation }}</div>
+                            </div>
+
+                            <!-- Skills Tag Breakdown -->
+                            <div class="d-flex flex-wrap align-items-center gap-2">
+                                <span class="text-muted fs-8 me-2">Key Skills:</span>
+                                {% for s in rec.matched_skills %}
+                                    <span class="badge bg-success bg-opacity-20 text-success border border-success border-opacity-25 fs-9">
+                                        <i class="fa-solid fa-check me-1"></i>{{ s.name }}
+                                    </span>
+                                {% endfor %}
+                                {% for s in rec.missing_skills[:3] %}
+                                    <span class="badge bg-danger bg-opacity-20 text-danger border border-danger border-opacity-25 fs-9">
+                                        <i class="fa-solid fa-plus me-1"></i>{{ s.name }}
+                                    </span>
+                                {% endfor %}
+                                {% if rec.missing_skills|length > 3 %}
+                                    <span class="text-muted fs-9">+{{ rec.missing_skills|length - 3 }} more</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Right Metric Score & Action Buttons -->
+                        <div class="col-lg-4 text-lg-end d-flex flex-column align-items-lg-end justify-content-between h-100">
+                            <div>
+                                <div class="text-muted fs-8 text-uppercase fw-semibold mb-1">Compatibility Score</div>
+                                <div class="text-cyan fw-bold display-5 mb-1">
+                                    {{ (rec.hybrid_score * 100)|round|int }}%
+                                </div>
+                                <div class="text-muted fs-9 mb-3">
+                                    ML Content: <strong>{{ (rec.ml_score * 100)|round|int }}%</strong> &bull; GNN Graph: <strong>{{ (rec.gnn_score * 100)|round|int }}%</strong>
+                                </div>
+                            </div>
+
+                            <div class="d-flex flex-wrap gap-2 justify-content-lg-end">
+                                <a href="{{ url_for('recommendations.skill_gap') }}?career_id={{ rec.career_id }}" class="btn btn-secondary-custom btn-sm px-3">
+                                    <i class="fa-solid fa-circle-nodes me-1"></i> Gap Analysis
+                                </a>
+                                <a href="{{ url_for('recommendations.alternative_careers') }}?career_id={{ rec.career_id }}" class="btn btn-outline-light btn-sm px-3">
+                                    <i class="fa-solid fa-shuffle me-1"></i> Alternatives
+                                </a>
+                                <a href="{{ url_for('recommendations.learning_path') }}?career_id={{ rec.career_id }}" class="btn btn-premium btn-sm px-3">
+                                    <i class="fa-solid fa-route me-1"></i> Learning Path
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+

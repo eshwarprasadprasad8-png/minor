@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Career Domain Interests - EduPath AI{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center py-2">
+    <div class="col-lg-8">
+        <!-- Wizard Navigation -->
+        <div class="card glass-card border-0 mb-4 py-3">
+            <div class="card-body">
+                <div class="row text-center fs-7 fw-bold text-muted">
+                    <div class="col text-white">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-dark text-white rounded-circle mb-2" style="width:28px; height:28px; border: 1px solid var(--border-color);"><i class="fa-solid fa-check"></i></div>
+                        <div>General Info</div>
+                    </div>
+                    <div class="col text-white">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-dark text-white rounded-circle mb-2" style="width:28px; height:28px; border: 1px solid var(--border-color);"><i class="fa-solid fa-check"></i></div>
+                        <div>Education</div>
+                    </div>
+                    <div class="col text-cyan">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-cyan text-dark rounded-circle mb-2" style="width:28px; height:28px;">3</div>
+                        <div>Interests</div>
+                    </div>
+                    <div class="col">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-dark text-muted rounded-circle mb-2" style="width:28px; height:28px; border: 1px solid var(--border-color);">4</div>
+                        <div>Skills</div>
+                    </div>
+                    <div class="col">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-dark text-muted rounded-circle mb-2" style="width:28px; height:28px; border: 1px solid var(--border-color);">5</div>
+                        <div>Preferences</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interests Form Card -->
+        <div class="card glass-card border-0 p-4">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <div class="bg-danger bg-opacity-25 p-3 rounded-3 text-danger">
+                        <i class="fa-solid fa-heart fs-2"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-white mb-1">Domain Interests & Tracks</h2>
+                        <p class="text-muted mb-0">Select technical fields you are passionate about to guide inductive GNN link prediction.</p>
+                    </div>
+                </div>
+
+                <hr class="border-secondary mb-4">
+
+                <form action="{{ url_for('student.interests') }}" method="POST">
+                    <div class="row g-3">
+                        {% for interest in interests %}
+                        <div class="col-md-6">
+                            <div class="form-check p-3 bg-dark bg-opacity-50 border border-secondary border-opacity-25 rounded-3 h-100 d-flex align-items-center">
+                                <input class="form-check-input ms-0 me-3" type="checkbox" name="interests" value="{{ interest.id }}" id="int_{{ interest.id }}" {% if interest.id in selected_ids %}checked{% endif %}>
+                                <label class="form-check-label text-light fw-medium cursor-pointer" for="int_{{ interest.id }}">
+                                    {{ interest.name }}
+                                </label>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <a href="{{ url_for('student.education') }}" class="btn btn-outline-secondary">
+                            <i class="fa-solid fa-arrow-left me-1"></i> Back
+                        </a>
+                        <button type="submit" class="btn btn-premium px-4">
+                            Save & Continue to Skills <i class="fa-solid fa-arrow-right ms-1"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

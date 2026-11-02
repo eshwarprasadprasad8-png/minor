@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - EduPath AI{% endblock %}
+
+{% block content %}
+<div class="row hero-gradient py-2 g-4">
+    <!-- Header -->
+    <div class="col-12">
+        <div class="card glass-card border-0 p-4">
+            <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                <div>
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <span class="badge bg-danger bg-opacity-20 text-danger border border-danger border-opacity-25">
+                            <i class="fa-solid fa-shield-halved me-1"></i> Admin Portal
+                        </span>
+                        <span class="badge bg-secondary bg-opacity-25 text-light">Role-Based Access Control</span>
+                    </div>
+                    <h2 class="text-white mb-1"><i class="fa-solid fa-gauge-high text-danger me-2"></i>System Administration & Governance</h2>
+                    <p class="text-muted mb-0">Monitor Knowledge Graph taxonomy, manage career profiles, and audit recommendation model pipelines.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Metrics Cards -->
+    <div class="col-sm-6 col-xl-3">
+        <div class="card glass-card border-0 p-3 h-100">
+            <div class="card-body d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="text-muted fs-8 text-uppercase fw-semibold mb-1">Career Entities</div>
+                    <h3 class="text-white mb-0 fw-bold">{{ total_careers }}</h3>
+                </div>
+                <div class="bg-cyan bg-opacity-10 text-cyan p-3 rounded-circle">
+                    <i class="fa-solid fa-briefcase fs-4"></i>
+                </div>
+            </div>
+            <div class="px-3 pb-2">
+                <a href="{{ url_for('admin.careers') }}" class="text-cyan text-decoration-none fs-8">
+                    Manage Careers <i class="fa-solid fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+        <div class="card glass-card border-0 p-3 h-100">
+            <div class="card-body d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="text-muted fs-8 text-uppercase fw-semibold mb-1">Ontology Skills</div>
+                    <h3 class="text-white mb-0 fw-bold">{{ total_skills }}</h3>
+                </div>
+                <div class="bg-warning bg-opacity-10 text-warning p-3 rounded-circle">
+                    <i class="fa-solid fa-screwdriver-wrench fs-4"></i>
+                </div>
+            </div>
+            <div class="px-3 pb-2">
+                <a href="{{ url_for('admin.skills') }}" class="text-warning text-decoration-none fs-8">
+                    Manage Skills <i class="fa-solid fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+        <div class="card glass-card border-0 p-3 h-100">
+            <div class="card-body d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="text-muted fs-8 text-uppercase fw-semibold mb-1">Registered Students</div>
+                    <h3 class="text-white mb-0 fw-bold">{{ total_students }}</h3>
+                </div>
+                <div class="bg-purple bg-opacity-10 text-purple p-3 rounded-circle">
+                    <i class="fa-solid fa-users fs-4"></i>
+                </div>
+            </div>
+            <div class="px-3 pb-2">
+                <a href="{{ url_for('admin.students') }}" class="text-purple text-decoration-none fs-8">
+                    View Registry <i class="fa-solid fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+        <div class="card glass-card border-0 p-3 h-100">
+            <div class="card-body d-flex align-items-center justify-content-between">
+                <div>
+                    <div class="text-muted fs-8 text-uppercase fw-semibold mb-1">Recommendation Audits</div>
+                    <h3 class="text-white mb-0 fw-bold">{{ total_recs }}</h3>
+                </div>
+                <div class="bg-success bg-opacity-10 text-success p-3 rounded-circle">
+                    <i class="fa-solid fa-clock-rotate-left fs-4"></i>
+                </div>
+            </div>
+            <div class="px-3 pb-2">
+                <a href="{{ url_for('admin.recommendations_log') }}" class="text-success text-decoration-none fs-8">
+                    View Audit Logs <i class="fa-solid fa-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Students Registry -->
+    <div class="col-lg-6">
+        <div class="card glass-card border-0 p-4 h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <h4 class="text-white mb-0"><i class="fa-solid fa-user-graduate text-cyan me-2"></i>Recently Enrolled Students</h4>
+                    <a href="{{ url_for('admin.students') }}" class="btn btn-outline-secondary btn-sm fs-8">View All</a>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover align-middle mb-0">
+                        <thead>
+                            <tr class="text-muted fs-8">
+                                <th>Student</th>
+                                <th>Degree &amp; Branch</th>
+                                <th>Experience</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for s in recent_students %}
+                            <tr>
+                                <td>
+                                    <div class="text-white fw-medium">{{ s.username }}</div>
+                                    <div class="text-muted fs-9">{{ s.email }}</div>
+                                </td>
+                                <td>
+                                    <div class="text-light fs-8">{{ s.degree or 'N/A' }}</div>
+                                    <div class="text-muted fs-9">{{ s.branch or 'General' }}</div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-secondary bg-opacity-25 text-light fs-9">{{ s.experience_level or 'Beginner' }}</span>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="3" class="text-center text-muted">No students registered yet.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Recommendation Log Previews -->
+    <div class="col-lg-6">
+        <div class="card glass-card border-0 p-4 h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <h4 class="text-white mb-0"><i class="fa-solid fa-clipboard-check text-success me-2"></i>Recent Recommendation Runs</h4>
+                    <a href="{{ url_for('admin.recommendations_log') }}" class="btn btn-outline-secondary btn-sm fs-8">Full Log</a>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover align-middle mb-0">
+                        <thead>
+                            <tr class="text-muted fs-8">
+                                <th>Student</th>
+                                <th>Recommended Role</th>
+                                <th>Hybrid Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for r in recent_recs %}
+                            <tr>
+                                <td class="text-white fw-medium">{{ r.username }}</td>
+                                <td class="text-light fs-8">{{ r.career_title }}</td>
+                                <td class="text-cyan fw-bold fs-8">{{ (r.hybrid_score * 100)|round|int }}%</td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="3" class="text-center text-muted">No recommendation logs recorded.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

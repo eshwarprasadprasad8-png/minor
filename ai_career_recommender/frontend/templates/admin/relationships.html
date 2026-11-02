@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}Career-Skill Mappings - Admin Portal{% endblock %}
+
+{% block content %}
+<div class="row hero-gradient py-2 g-4">
+    <!-- Header -->
+    <div class="col-12">
+        <div class="card glass-card border-0 p-4">
+            <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                <div>
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-secondary btn-sm">
+                            <i class="fa-solid fa-arrow-left me-1"></i> Admin Dashboard
+                        </a>
+                        <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">
+                            Relational Edges
+                        </span>
+                    </div>
+                    <h2 class="text-white mb-1"><i class="fa-solid fa-link text-success me-2"></i>Career-Skill Relationship Graph</h2>
+                    <p class="text-muted mb-0">Configure prerequisite importance weights ($0.1 \le w \le 1.0$) connecting career nodes to skill ontology entities.</p>
+                </div>
+
+                <button class="btn btn-premium" data-bs-toggle="modal" data-bs-target="#addLinkModal">
+                    <i class="fa-solid fa-plus me-1"></i> Add Link Edge
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter by Career -->
+    <div class="col-12">
+        <div class="card glass-card border-0 p-3">
+            <div class="d-flex align-items-center gap-3">
+                <label class="text-muted fs-8 mb-0">Filter by Career Profile:</label>
+                <select class="form-select bg-dark text-light border-secondary fs-8 w-auto" onchange="window.location.href='{{ url_for('admin.relationships') }}' + (this.value ? '?career_id=' + this.value : '')">
+                    <option value="">-- All Career Roles (Latest 100) --</option>
+                    {% for c in careers %}
+                    <option value="{{ c.id }}" {% if c.id == selected_career_id %}selected{% endif %}>
+                        {{ c.title }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Relationships Table -->
+    <div class="col-12">
+        <div class="card glass-card border-0 p-4">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover align-middle mb-0">
+                        <thead>
+                            <tr class="text-muted fs-8">
+                                <th>Career Profile</th>
+                                <th>Skill Entity</th>
+                                <th>Category</th>
+                                <th>Importance Weight</th>
+                                <th>Requirement Type</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for link in links %}
+                            <tr>
+                                <td class="text-white fw-medium">{{ link.career_title }}</td>
+                                <td>
+                                    <span class="text-cyan fw-semibold">{{ link.skill_name }}</span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-secondary bg-opacity-25 text-light fs-9">{{ link.skill_category }}</span>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="progress bg-dark flex-grow-1" style="height: 6px; width: 60px;">
+                                            <div class="progress-bar bg-cyan" style="width: {{ (link.importance * 100)|round|int }}%;"></div>
+                                        </div>
+                                        <span class="text-muted fs-9">{{ link.importance }}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge {% if link.skill_type == 'Required' %}bg-primary{% else %}bg-secondary{% endif %} bg-opacity-25 text-{% if link.skill_type == 'Required' %}primary{% else %}light{% endif %} fs-9">
+                                        {{ link.skill_type }}
+                                    </span>
+                                </td>
+                                <td class="text-end">
+                                    <form action="{{ url_for('admin.delete_relationship', rel_id=link.id) }}" method="POST" onsubmit="return confirm('Disconnect this requirement edge?');">
+                                        <input type="hidden" name="career_id" value="{{ link.career_id }}">
+                                        <button type="submit" class="btn btn-outline-danger btn-sm py-1 px-2">
+                                            <i class="fa-solid fa-unlink"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="6" class="text-center text-muted">No requirement links found.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Relationship Modal -->
+<div class="modal fade" id="addLinkModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark border-secondary">
+            <form action="{{ url_for('admin.add_relationship') }}" method="POST">
+                <div class="modal-header border-secondary">
+                    <h5 class="modal-title text-white"><i class="fa-solid fa-link text-cyan me-2"></i>Link Career to Skill</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body d-flex flex-column gap-3">
+                    <div>
+                        <label class="form-label text-muted fs-8">Select Career</label>
+                        <select name="career_id" class="form-select bg-dark text-light border-secondary" required>
+                            {% for c in careers %}
+                            <option value="{{ c.id }}" {% if c.id == selected_career_id %}selected{% endif %}>{{ c.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label text-muted fs-8">Select Skill</label>
+                        <select name="skill_id" class="form-select bg-dark text-light border-secondary" required>
+                            {% for s in skills %}
+                            <option value="{{ s.id }}">{{ s.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div>
+                        <label class="form-label text-muted fs-8">Importance Weight (0.1 - 1.0)</label>
+                        <input type="number" step="0.05" min="0.1" max="1.0" name="importance" value="0.80" class="form-control bg-dark text-light border-secondary" required>
+                    </div>
+                    <div>
+                        <label class="form-label text-muted fs-8">Requirement Type</label>
+                        <select name="skill_type" class="form-select bg-dark text-light border-secondary">
+                            <option value="Required" selected>Required</option>
+                            <option value="Preferred">Preferred</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer border-secondary">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-premium">Save Link Edge</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

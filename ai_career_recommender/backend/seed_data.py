@@ -11,17 +11,23 @@ def clear_existing_data():
     print("[*] Clearing existing database tables...")
     from database.connection import get_db_connection
     connection = get_db_connection()
+    tables = [
+        "student_skills", "student_interests", "career_skills", 
+        "education", "skill_gaps", "recommendations", 
+        "skills", "careers", "interests", "student_profiles", "users"
+    ]
     try:
         with connection.cursor() as cursor:
-            cursor.execute("SET FOREIGN_KEY_CHECKS = 0;")
-            tables = [
-                "student_skills", "student_interests", "career_skills", 
-                "education", "skill_gaps", "recommendations", 
-                "skills", "careers", "interests", "student_profiles", "users"
-            ]
-            for t in tables:
-                cursor.execute(f"TRUNCATE TABLE {t};")
-            cursor.execute("SET FOREIGN_KEY_CHECKS = 1;")
+            try:
+                cursor.execute("SET FOREIGN_KEY_CHECKS = 0;")
+                for t in tables:
+                    cursor.execute(f"TRUNCATE TABLE {t};")
+                cursor.execute("SET FOREIGN_KEY_CHECKS = 1;")
+            except Exception:
+                cursor.execute("PRAGMA foreign_keys = OFF;")
+                for t in tables:
+                    cursor.execute(f"DELETE FROM {t};")
+                cursor.execute("PRAGMA foreign_keys = ON;")
         connection.commit()
         print("[+] Database cleared successfully.")
     except Exception as e:
@@ -160,12 +166,31 @@ def create_admin_user():
     
     # Initialize profile for student
     execute_query(
-        """INSERT INTO student_profiles (user_id, full_name, phone, degree, branch, graduation_year, experience_level) 
-           VALUES (%s, %s, %s, %s, %s, %s, %s)""",
-        (student_id, 'Jane Doe', '9876543210', 'B.Tech', 'Computer Science', 2026, 'Beginner'),
+        """INSERT INTO student_profiles (user_id, full_name, phone, degree, branch, graduation_year, experience_level, target_career_id) 
+           VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""",
+        (student_id, 'Jane Doe', '9876543210', 'B.Tech', 'Computer Science', 2026, 'Intermediate', 1),
         commit=True
     )
-    print(f"[+] Created Demo Student Account (username: demostudent, password: student123)")
+
+    # Seed baseline student skills for demostudent (Python, ML, Pandas, NumPy, SQL)
+    demo_skills = [1, 4, 5, 15, 16, 17]
+    for s_id in demo_skills:
+        execute_query(
+            "INSERT INTO student_skills (user_id, skill_id, proficiency_level) VALUES (%s, %s, %s)",
+            (student_id, s_id, 'Intermediate'),
+            commit=True
+        )
+
+    # Seed baseline student interests (AI/ML and Data Science)
+    demo_interests = [1, 5]
+    for i_id in demo_interests:
+        execute_query(
+            "INSERT INTO student_interests (user_id, interest_id) VALUES (%s, %s)",
+            (student_id, i_id),
+            commit=True
+        )
+
+    print(f"[+] Created Demo Student Account (username: demostudent, password: student123) with initial skills and interests")
 
 def main():
     print("==========================================")

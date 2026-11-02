@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Career Preferences - EduPath AI{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center py-2">
+    <div class="col-lg-8">
+        <!-- Wizard Navigation -->
+        <div class="card glass-card border-0 mb-4 py-3">
+            <div class="card-body">
+                <div class="row text-center fs-7 fw-bold text-muted">
+                    <div class="col text-white">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-dark text-white rounded-circle mb-2" style="width:28px; height:28px; border: 1px solid var(--border-color);"><i class="fa-solid fa-check"></i></div>
+                        <div>General Info</div>
+                    </div>
+                    <div class="col text-white">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-dark text-white rounded-circle mb-2" style="width:28px; height:28px; border: 1px solid var(--border-color);"><i class="fa-solid fa-check"></i></div>
+                        <div>Education</div>
+                    </div>
+                    <div class="col text-white">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-dark text-white rounded-circle mb-2" style="width:28px; height:28px; border: 1px solid var(--border-color);"><i class="fa-solid fa-check"></i></div>
+                        <div>Interests</div>
+                    </div>
+                    <div class="col text-white">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-dark text-white rounded-circle mb-2" style="width:28px; height:28px; border: 1px solid var(--border-color);"><i class="fa-solid fa-check"></i></div>
+                        <div>Skills</div>
+                    </div>
+                    <div class="col text-cyan">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-cyan text-dark rounded-circle mb-2" style="width:28px; height:28px;">5</div>
+                        <div>Preferences</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Preferences Form Card -->
+        <div class="card glass-card border-0 p-4">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <div class="bg-success bg-opacity-25 p-3 rounded-3 text-success">
+                        <i class="fa-solid fa-sliders fs-2"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-white mb-1">Target Career Preference</h2>
+                        <p class="text-muted mb-0">Select your dream target role. The AI engine will benchmark your skills, highlight gaps, and create a custom learning path.</p>
+                    </div>
+                </div>
+
+                <hr class="border-secondary mb-4">
+
+                <form action="{{ url_for('student.preferences') }}" method="POST">
+                    <div class="mb-4">
+                        <label class="form-label text-muted fs-8">Select Target Career Goal:</label>
+                        <select name="target_career_id" class="form-select form-select-lg bg-dark text-light border-secondary">
+                            <option value="">-- Let AI Recommend Based on My Profile --</option>
+                            {% for c in careers %}
+                            <option value="{{ c.id }}" {% if c.id == selected_career_id %}selected{% endif %}>
+                                {{ c.title }} ({{ c.category }}) &bull; {{ c.average_salary }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <a href="{{ url_for('student.skills') }}" class="btn btn-outline-secondary">
+                            <i class="fa-solid fa-arrow-left me-1"></i> Back to Skills
+                        </a>
+                        <button type="submit" class="btn btn-premium px-4">
+                            Complete Setup & Generate Matches <i class="fa-solid fa-compass ms-1"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

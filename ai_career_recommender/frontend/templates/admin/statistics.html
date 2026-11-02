@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block title %}Graph Statistics & Metrics - Admin Portal{% endblock %}
+
+{% block content %}
+<div class="row hero-gradient py-2 g-4">
+    <div class="col-12">
+        <div class="card glass-card border-0 p-4">
+            <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                <div>
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-secondary btn-sm">
+                            <i class="fa-solid fa-arrow-left me-1"></i> Admin Dashboard
+                        </a>
+                        <span class="badge bg-secondary bg-opacity-25 text-light">Ontology Metrics</span>
+                    </div>
+                    <h2 class="text-white mb-1"><i class="fa-solid fa-chart-line text-cyan me-2"></i>Graph Topology & Model Statistics</h2>
+                    <p class="text-muted mb-0">Structural properties of the heterogeneous knowledge graph and PyTorch Geometric GraphSAGE model parameters.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+        <div class="card glass-card border-0 p-3 h-100 text-center">
+            <div class="text-muted fs-9 text-uppercase mb-1">Total Graph Entities</div>
+            <h2 class="text-white fw-bold mb-0">{{ stats.total_nodes }}</h2>
+            <div class="text-cyan fs-9 mt-1">{{ stats.careers_count }} Careers &bull; {{ stats.skills_count }} Skills</div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+        <div class="card glass-card border-0 p-3 h-100 text-center">
+            <div class="text-muted fs-9 text-uppercase mb-1">Total Relational Edges</div>
+            <h2 class="text-white fw-bold mb-0">{{ stats.total_edges }}</h2>
+            <div class="text-success fs-9 mt-1">Multi-Relational Links</div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+        <div class="card glass-card border-0 p-3 h-100 text-center">
+            <div class="text-muted fs-9 text-uppercase mb-1">Mean Entity Degree</div>
+            <h2 class="text-white fw-bold mb-0">{{ stats.avg_degree }}</h2>
+            <div class="text-warning fs-9 mt-1">Avg edges per node</div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3">
+        <div class="card glass-card border-0 p-3 h-100 text-center">
+            <div class="text-muted fs-9 text-uppercase mb-1">Graph Density</div>
+            <h2 class="text-white fw-bold mb-0">{{ stats.density }}</h2>
+            <div class="text-purple fs-9 mt-1">Sparse connectivity</div>
+        </div>
+    </div>
+
+    <!-- Technical Details Card -->
+    <div class="col-lg-6">
+        <div class="card glass-card border-0 p-4 h-100">
+            <div class="card-body">
+                <h4 class="text-white mb-3"><i class="fa-solid fa-brain-circuit text-cyan me-2"></i>GraphSAGE Architecture Parameters</h4>
+                <div class="table-responsive">
+                    <table class="table table-dark table-striped border-secondary mb-0">
+                        <tbody>
+                            <tr>
+                                <td class="text-muted fs-8">Convolutional Layers</td>
+                                <td class="text-white fw-medium fs-8">2 &times; SAGEConv (Mean Aggregation)</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted fs-8">Input Feature Dimensions</td>
+                                <td class="text-white fw-medium fs-8">64 Dimensions (One-hot + Degree Centrality)</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted fs-8">Hidden Dimension</td>
+                                <td class="text-white fw-medium fs-8">48 Dimensions (ReLU Activation)</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted fs-8">Latent Embedding Size ($z$)</td>
+                                <td class="text-white fw-medium fs-8">32 Dimensions (L2 Normalized)</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted fs-8">Link Prediction Objective</td>
+                                <td class="text-white fw-medium fs-8">Binary Cross-Entropy with Logits (BCE)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hybrid Weighting Configuration Card -->
+    <div class="col-lg-6">
+        <div class="card glass-card border-0 p-4 h-100">
+            <div class="card-body">
+                <h4 class="text-white mb-3"><i class="fa-solid fa-sliders text-warning me-2"></i>Hybrid Ranking Configuration</h4>
+                <div class="table-responsive">
+                    <table class="table table-dark table-striped border-secondary mb-0">
+                        <tbody>
+                            <tr>
+                                <td class="text-muted fs-8">ML Content Weight ($w_{\text{ML}}$)</td>
+                                <td class="text-cyan fw-bold fs-8">0.40 (40%)</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted fs-8">GNN Embedding Weight ($w_{\text{GNN}}$)</td>
+                                <td class="text-cyan fw-bold fs-8">0.60 (60%)</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted fs-8">Category Diversity Penalty ($\lambda$)</td>
+                                <td class="text-white fw-medium fs-8">0.15 (MMR Enforcement)</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted fs-8">Top-K Recommendations</td>
+                                <td class="text-white fw-medium fs-8">5 Roles</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted fs-8">Maximum Per-Category Saturation</td>
+                                <td class="text-white fw-medium fs-8">2 Careers before penalty</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

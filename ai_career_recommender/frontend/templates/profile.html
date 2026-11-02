@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}General Profile - EduPath AI{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center py-2">
+    <div class="col-lg-8">
+        <!-- Wizard Navigation -->
+        <div class="card glass-card border-0 mb-4 py-3">
+            <div class="card-body">
+                <div class="row text-center fs-7 fw-bold text-muted">
+                    <div class="col text-cyan">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-cyan text-dark rounded-circle mb-2" style="width:28px; height:28px;">1</div>
+                        <div>General Info</div>
+                    </div>
+                    <div class="col">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-dark text-muted rounded-circle mb-2" style="width:28px; height:28px; border: 1px solid var(--border-color);">2</div>
+                        <div>Education</div>
+                    </div>
+                    <div class="col">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-dark text-muted rounded-circle mb-2" style="width:28px; height:28px; border: 1px solid var(--border-color);">3</div>
+                        <div>Interests</div>
+                    </div>
+                    <div class="col">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-dark text-muted rounded-circle mb-2" style="width:28px; height:28px; border: 1px solid var(--border-color);">4</div>
+                        <div>Skills</div>
+                    </div>
+                    <div class="col">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-dark text-muted rounded-circle mb-2" style="width:28px; height:28px; border: 1px solid var(--border-color);">5</div>
+                        <div>Preferences</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Form Card -->
+        <div class="card glass-card border-0 p-4">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <div class="bg-primary bg-opacity-25 p-3 rounded-3 text-primary">
+                        <i class="fa-solid fa-user-gear fs-2"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-white mb-1">Student Profile Setup</h2>
+                        <p class="text-muted mb-0">Provide basic demographic and academic details to personalize recommendations.</p>
+                    </div>
+                </div>
+
+                <hr class="border-secondary mb-4">
+
+                <form action="{{ url_for('student.profile') }}" method="POST">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label text-muted fs-8">Full Name</label>
+                            <input type="text" name="full_name" class="form-control bg-dark text-light border-secondary" value="{{ profile.full_name or '' }}" placeholder="e.g. Jane Doe" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted fs-8">Phone Number</label>
+                            <input type="tel" name="phone" class="form-control bg-dark text-light border-secondary" value="{{ profile.phone or '' }}" placeholder="e.g. +91 9876543210">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted fs-8">Degree Program</label>
+                            <select name="degree" class="form-select bg-dark text-light border-secondary">
+                                <option value="B.Tech" {% if profile.degree == 'B.Tech' %}selected{% endif %}>B.Tech / B.E.</option>
+                                <option value="B.Sc" {% if profile.degree == 'B.Sc' %}selected{% endif %}>B.Sc</option>
+                                <option value="BCA" {% if profile.degree == 'BCA' %}selected{% endif %}>BCA</option>
+                                <option value="M.Tech" {% if profile.degree == 'M.Tech' %}selected{% endif %}>M.Tech / M.E.</option>
+                                <option value="MCA" {% if profile.degree == 'MCA' %}selected{% endif %}>MCA</option>
+                                <option value="Other" {% if profile.degree == 'Other' %}selected{% endif %}>Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted fs-8">Branch / Discipline</label>
+                            <input type="text" name="branch" class="form-control bg-dark text-light border-secondary" value="{{ profile.branch or '' }}" placeholder="e.g. Computer Science, AI, IT" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted fs-8">Graduation Year</label>
+                            <input type="number" name="graduation_year" class="form-control bg-dark text-light border-secondary" value="{{ profile.graduation_year or 2026 }}" min="2020" max="2035">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted fs-8">Current Experience Level</label>
+                            <select name="experience_level" class="form-select bg-dark text-light border-secondary">
+                                <option value="Beginner" {% if profile.experience_level == 'Beginner' %}selected{% endif %}>Beginner (Student / Entry Level)</option>
+                                <option value="Intermediate" {% if profile.experience_level == 'Intermediate' %}selected{% endif %}>Intermediate (1-2 years projects/internships)</option>
+                                <option value="Advanced" {% if profile.experience_level == 'Advanced' %}selected{% endif %}>Advanced (3+ years solid development)</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label text-muted fs-8">Short Bio / Career Goals</label>
+                            <textarea name="bio" rows="3" class="form-control bg-dark text-light border-secondary" placeholder="Briefly describe your career aspirations, key areas of interest, or personal projects...">{{ profile.bio or '' }}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <a href="{{ url_for('student.dashboard') }}" class="btn btn-outline-secondary">
+                            <i class="fa-solid fa-arrow-left me-1"></i> Dashboard
+                        </a>
+                        <button type="submit" class="btn btn-premium px-4">
+                            Save & Continue to Education <i class="fa-solid fa-arrow-right ms-1"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

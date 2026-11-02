@@ -1,0 +1,103 @@
+id,name,category,difficulty_level
+1,Python,Programming Languages,Intermediate
+2,PyTorch,AI/ML,Advanced
+3,TensorFlow,AI/ML,Advanced
+4,Scikit-Learn,AI/ML,Intermediate
+5,Machine Learning Algorithms,AI/ML,Intermediate
+6,Deep Learning,AI/ML,Advanced
+7,Natural Language Processing,AI/ML,Advanced
+8,Computer Vision,AI/ML,Advanced
+9,HuggingFace & Transformers,AI/ML,Intermediate
+10,MLOps & Model Deployment,AI/ML,Advanced
+11,Graph Neural Networks,AI/ML,Advanced
+12,Large Language Models (LLMs),AI/ML,Advanced
+13,OpenCV,AI/ML,Intermediate
+14,Reinforcement Learning,AI/ML,Advanced
+15,Pandas,Data Science,Intermediate
+16,NumPy,Data Science,Intermediate
+17,SQL & Relational DBs,Database,Intermediate
+18,Data Visualization (Tableau/PowerBI),Data Science,Beginner
+19,Statistical Modeling,Data Science,Advanced
+20,Apache Spark,Big Data,Advanced
+21,Data Pipelines (ETL),Data Science,Intermediate
+22,Feature Engineering,Data Science,Intermediate
+23,R Programming,Data Science,Beginner
+24,A/B Testing & Experimentation,Data Science,Intermediate
+25,JavaScript,Programming Languages,Intermediate
+26,TypeScript,Programming Languages,Intermediate
+27,HTML5 & CSS3,Web Development,Beginner
+28,React.js,Web Development,Intermediate
+29,Next.js,Web Development,Intermediate
+30,Node.js,Web Development,Intermediate
+31,Express.js,Web Development,Intermediate
+32,FastAPI,Web Development,Intermediate
+33,Flask,Web Development,Beginner
+34,Django,Web Development,Intermediate
+35,RESTful API Design,Web Development,Intermediate
+36,GraphQL,Web Development,Intermediate
+37,Vue.js,Web Development,Beginner
+38,Tailwind CSS,Web Development,Beginner
+39,Microservices Architecture,Software Engineering,Advanced
+40,Object-Oriented Programming (OOP),Software Engineering,Intermediate
+41,Data Structures & Algorithms,Software Engineering,Intermediate
+42,Software Design Patterns,Software Engineering,Advanced
+43,Docker & Containerization,DevOps,Intermediate
+44,Kubernetes,DevOps,Advanced
+45,AWS (Amazon Web Services),Cloud,Intermediate
+46,Microsoft Azure,Cloud,Intermediate
+47,Google Cloud Platform (GCP),Cloud,Intermediate
+48,CI/CD Pipelines (GitHub Actions/Jenkins),DevOps,Intermediate
+49,Terraform (IaC),DevOps,Advanced
+50,Linux Administration & Bash,Systems,Intermediate
+51,Prometheus & Grafana,DevOps,Intermediate
+52,Ansible,DevOps,Intermediate
+53,Git & Version Control,Software Engineering,Beginner
+54,Site Reliability Engineering (SRE),Cloud,Advanced
+55,PostgreSQL,Database,Intermediate
+56,MongoDB,Database,Intermediate
+57,Redis & In-Memory Caching,Database,Intermediate
+58,Neo4j & Graph Databases,Database,Advanced
+59,Elasticsearch,Database,Intermediate
+60,Kafka & Event Streaming,Systems,Advanced
+61,Snowflake & Cloud Warehousing,Data Science,Intermediate
+62,Network Security & Protocols,Cybersecurity,Intermediate
+63,Penetration Testing & Ethical Hacking,Cybersecurity,Advanced
+64,Cryptography & PKI,Cybersecurity,Advanced
+65,SIEM & SOC Operations,Cybersecurity,Intermediate
+66,Application Security (OWASP Top 10),Cybersecurity,Intermediate
+67,Wireshark & Packet Analysis,Cybersecurity,Intermediate
+68,Cloud Security & IAM,Cybersecurity,Advanced
+69,Incident Response & Forensics,Cybersecurity,Advanced
+70,Vulnerability Assessment,Cybersecurity,Intermediate
+71,Flutter & Dart,Mobile,Intermediate
+72,React Native,Mobile,Intermediate
+73,Kotlin & Android SDK,Mobile,Intermediate
+74,Swift & iOS Development,Mobile,Intermediate
+75,Mobile UI Design,Mobile,Beginner
+76,Offline Storage (SQLite/Room),Mobile,Intermediate
+77,C++,Programming Languages,Advanced
+78,C Language,Programming Languages,Intermediate
+79,Rust,Programming Languages,Advanced
+80,Go (Golang),Programming Languages,Intermediate
+81,Java,Programming Languages,Intermediate
+82,Operating Systems Internals,Systems,Advanced
+83,Computer Networking (TCP/IP),Systems,Intermediate
+84,Concurrency & Multi-Threading,Systems,Advanced
+85,Embedded Systems & Microcontrollers,Systems,Advanced
+86,Memory Management & Profiling,Systems,Advanced
+87,Agile & Scrum Methodologies,Management,Beginner
+88,Technical Writing & Docs,General,Beginner
+89,System Architecture Design,Software Engineering,Advanced
+90,Code Review & Quality Assurance,Software Engineering,Intermediate
+91,Unit & Integration Testing (PyTest/Jest),Software Engineering,Intermediate
+92,UI/UX Prototyping (Figma),Design,Beginner
+93,User Research & Usability Testing,Design,Beginner
+94,Product Roadmap Planning,Management,Intermediate
+95,Risk Assessment & Mitigation,Management,Intermediate
+96,DevSecOps Integration,Cybersecurity,Advanced
+97,Time Series Analysis,Data Science,Intermediate
+98,Recommendation Systems,AI/ML,Advanced
+99,API Gateways & Reverse Proxies,Cloud,Intermediate
+100,Kubernetes Helm & Operators,DevOps,Advanced
+101,Serverless Architecture (AWS Lambda),Cloud,Intermediate
+102,Blockchain Smart Contracts (Solidity),Systems,Advanced

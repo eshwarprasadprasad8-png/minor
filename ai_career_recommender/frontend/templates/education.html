@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Education Background - EduPath AI{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center py-2">
+    <div class="col-lg-8">
+        <!-- Wizard Navigation -->
+        <div class="card glass-card border-0 mb-4 py-3">
+            <div class="card-body">
+                <div class="row text-center fs-7 fw-bold text-muted">
+                    <div class="col text-white">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-dark text-white rounded-circle mb-2" style="width:28px; height:28px; border: 1px solid var(--border-color);"><i class="fa-solid fa-check"></i></div>
+                        <div>General Info</div>
+                    </div>
+                    <div class="col text-cyan">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-cyan text-dark rounded-circle mb-2" style="width:28px; height:28px;">2</div>
+                        <div>Education</div>
+                    </div>
+                    <div class="col">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-dark text-muted rounded-circle mb-2" style="width:28px; height:28px; border: 1px solid var(--border-color);">3</div>
+                        <div>Interests</div>
+                    </div>
+                    <div class="col">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-dark text-muted rounded-circle mb-2" style="width:28px; height:28px; border: 1px solid var(--border-color);">4</div>
+                        <div>Skills</div>
+                    </div>
+                    <div class="col">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-dark text-muted rounded-circle mb-2" style="width:28px; height:28px; border: 1px solid var(--border-color);">5</div>
+                        <div>Preferences</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Education Form Card -->
+        <div class="card glass-card border-0 p-4">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <div class="bg-info bg-opacity-25 p-3 rounded-3 text-cyan">
+                        <i class="fa-solid fa-graduation-cap fs-2"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-white mb-1">Academic Credentials</h2>
+                        <p class="text-muted mb-0">Academic qualifications are matched against industry role eligibility criteria (+10% score alignment).</p>
+                    </div>
+                </div>
+
+                <hr class="border-secondary mb-4">
+
+                <form action="{{ url_for('student.education') }}" method="POST">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label text-muted fs-8">Current Degree</label>
+                            <select name="degree" class="form-select bg-dark text-light border-secondary">
+                                <option value="B.Tech" {% if profile.degree == 'B.Tech' %}selected{% endif %}>B.Tech / B.E. (Bachelor of Technology)</option>
+                                <option value="B.Sc" {% if profile.degree == 'B.Sc' %}selected{% endif %}>B.Sc (Computer Science / Data Science)</option>
+                                <option value="BCA" {% if profile.degree == 'BCA' %}selected{% endif %}>BCA (Computer Applications)</option>
+                                <option value="M.Tech" {% if profile.degree == 'M.Tech' %}selected{% endif %}>M.Tech / M.S. (Specialization)</option>
+                                <option value="MCA" {% if profile.degree == 'MCA' %}selected{% endif %}>MCA (Master of Computer Applications)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted fs-8">Branch / Major Field</label>
+                            <input type="text" name="branch" class="form-control bg-dark text-light border-secondary" value="{{ profile.branch or '' }}" placeholder="e.g. Computer Science and Engineering" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted fs-8">Expected Graduation Year</label>
+                            <input type="number" name="graduation_year" class="form-control bg-dark text-light border-secondary" value="{{ profile.graduation_year or 2026 }}" min="2020" max="2035">
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <a href="{{ url_for('student.profile') }}" class="btn btn-outline-secondary">
+                            <i class="fa-solid fa-arrow-left me-1"></i> Back
+                        </a>
+                        <button type="submit" class="btn btn-premium px-4">
+                            Save & Continue to Interests <i class="fa-solid fa-arrow-right ms-1"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
